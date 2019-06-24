@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <UserSecretsId>4d29f82e-59d2-4892-a6b8-909378402edf</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.4.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\hsl.dal\hsl.dal.csproj" />
+  </ItemGroup>
+
+</Project>
