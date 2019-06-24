@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using hsl.api.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace hsl.api
 {
@@ -34,11 +29,10 @@ namespace hsl.api
             //enable CORS
             services.AddCors();
 
-            // получаем строку подключения из файла конфигурации
-            string connection = Configuration.GetConnectionString("LocalHostConnection");
-            // добавляем контекст MobileContext в качестве сервиса в приложение
-            services.AddDbContext<DbContext>(options =>
-                options.UseSqlServer(connection));
+            services.AddEntityFrameworkSqlServer().AddDbContext<hslapiContext>(options =>
+                 options.UseSqlServer(Configuration.GetConnectionString("hslapiContextConnection"),
+                 b => b.MigrationsAssembly("hsl.api")));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +48,8 @@ namespace hsl.api
                 app.UseHsts();
             }
 
+            app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
             app.UseCors(options => options.AllowAnyOrigin()
