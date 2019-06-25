@@ -19,14 +19,14 @@ namespace hsl.api.Controllers
     {
         
         private readonly UserManager<User> _userManager;
-        private readonly IRegistrationInterface _registrationService;
+   //     private readonly IRegistrationInterface _registrationService;
         private readonly IMapper _mapper;
         private readonly hslapiContext _context;
 
-        public AccauntsController(UserManager<User> userManager, RegistrationService registrationService, IMapper mapper, hslapiContext context)
+        public AccauntsController(UserManager<User> userManager, IMapper mapper, hslapiContext context) // , RegistrationService registrationService
         {
             this._userManager = userManager;
-            this._registrationService = registrationService;
+    //        this._registrationService = registrationService;
             this._mapper = mapper;
             this._context = context;
         }
