@@ -21,12 +21,14 @@ namespace hsl.api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IRegistrationInterface _registrationService;
         private readonly IMapper _mapper;
+        private readonly hslapiContext _context;
 
-        public AccauntsController(UserManager<User> userManager, RegistrationService registrationService, IMapper mapper)
+        public AccauntsController(UserManager<User> userManager, RegistrationService registrationService, IMapper mapper, hslapiContext context)
         {
             this._userManager = userManager;
             this._registrationService = registrationService;
             this._mapper = mapper;
+            this._context = context;
         }
 
         [HttpPost]
@@ -40,13 +42,20 @@ namespace hsl.api.Controllers
 
             if(!result.Succeeded) return BadRequest( new { message = "Error on creating identity model" });
 
-            var dbResult = await _registrationService.Register(userIdentity, model);
-            if (dbResult == null)
-            {
-                if (!result.Succeeded) return BadRequest(new { message = "Error on working with DataBase" });
-            }
 
-            return Ok(dbResult);
+            try
+            {
+                await _context.Customers.AddAsync(new Customer { IdentityId = userIdentity.Id, Location = model.Location });
+                _context.SaveChanges();
+
+                var newUser = _context.Customers.FirstOrDefault(x => x.IdentityId == userIdentity.Id);
+
+                return Ok(newUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error on working with DataBase" });
+            }
         }
 
     }
