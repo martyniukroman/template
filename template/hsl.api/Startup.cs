@@ -1,7 +1,10 @@
-﻿using hsl.api.Models;
+﻿using AutoMapper;
+using hsl.api.Helpers;
+using hsl.api.Interfaces;
+using hsl.api.Models;
+using hsl.api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,9 +32,21 @@ namespace hsl.api
             //enable CORS
             services.AddCors();
 
+            // setup mapper
+            var mappingConfig = new MapperConfiguration(mConfig =>
+            {
+                mConfig.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+
+            // setup entity
             services.AddEntityFrameworkSqlServer().AddDbContext<hslapiContext>(options =>
                  options.UseSqlServer(Configuration.GetConnectionString("hslapiContextConnection"),
                  b => b.MigrationsAssembly("hsl.api")));
+
+            // Initialization dependency injection
+            services.AddScoped<IRegistrationInterface, RegistrationService>();
+
 
         }
 

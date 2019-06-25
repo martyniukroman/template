@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace hsl.api.Models
+namespace hsl.dto.Models
 {
     public class Customer : AppUser
     {

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace hsl.api.Models
+namespace hsl.dto.Models
 {
     public class AppUser : IdentityUser
     {
