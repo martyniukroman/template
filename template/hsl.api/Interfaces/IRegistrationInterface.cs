@@ -6,6 +6,6 @@ namespace hsl.api.Interfaces
 {
     public interface IRegistrationInterface
     {
-       Task<User> Register(User identityUser);
+       Task<Customer> Register(User identityUser, RegistrationUserViewModel model);
     }
 }

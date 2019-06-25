@@ -1,7 +1,6 @@
 ﻿using hsl.api.Interfaces;
 using hsl.api.Models;
 using hsl.api.ViewModels;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +17,14 @@ namespace hsl.api.Services
             this._context = context;
         }
 
-        public async Task<User> Register(User identityUser)
+        public async Task<Customer> Register(User identityUser, RegistrationUserViewModel model)
         {
             try
             {
-                _context.Users.Add(identityUser);
+                await _context.Customers.AddAsync( new Customer { IdentityId = identityUser.Id, Location = model.Location });
                 _context.SaveChanges();
 
-                return _context.Users.FirstOrDefault(x => x.Email == identityUser.Email) as User;
+                return _context.Customers.FirstOrDefault(x => x.IdentityId == identityUser.Id);
             }
             catch (Exception ex)
             {

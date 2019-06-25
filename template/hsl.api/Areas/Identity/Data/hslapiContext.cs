@@ -15,7 +15,7 @@ namespace hsl.api.Models
         {
         }
 
-      //  public DbSet<Customer> Customers { set; get; }
+        public DbSet<Customer> Customers { set; get; }
         public DbSet<Phone> Phones { set; get; }
 
         protected override void OnModelCreating(ModelBuilder builder)

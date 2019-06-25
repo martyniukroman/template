@@ -20,25 +20,27 @@ namespace hsl.api.Controllers
         
         private readonly UserManager<User> _userManager;
         private readonly IRegistrationInterface _registrationService;
+        private readonly IMapper _mapper;
 
-        public AccauntsController(UserManager<User> userManager, RegistrationService registrationService)
+        public AccauntsController(UserManager<User> userManager, RegistrationService registrationService, IMapper mapper)
         {
             this._userManager = userManager;
             this._registrationService = registrationService;
+            this._mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] User value)
+        public async Task<IActionResult> Post([FromBody] RegistrationUserViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest( new { message = "Invalid registration model" });
 
-            var userIdentity = value;
+            var userIdentity = _mapper.Map<User>(model);
 
-            var result = await _userManager.CreateAsync(userIdentity);
+            var result = await _userManager.CreateAsync(userIdentity, model.Password);
 
             if(!result.Succeeded) return BadRequest( new { message = "Error on creating identity model" });
 
-            var dbResult = await _registrationService.Register(userIdentity);
+            var dbResult = await _registrationService.Register(userIdentity, model);
             if (dbResult == null)
             {
                 if (!result.Succeeded) return BadRequest(new { message = "Error on working with DataBase" });

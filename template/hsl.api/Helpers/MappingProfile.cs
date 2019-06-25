@@ -8,7 +8,8 @@ namespace hsl.api.Helpers
     {
         public MappingProfile()
         {
-            CreateMap<User, RegistrationUserViewModel>();
+           // CreateMap<RegistrationUserViewModel, Customer>();
+            CreateMap<Customer, RegistrationUserViewModel>();
         }
     }
 }
