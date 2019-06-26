@@ -3,18 +3,28 @@ using hsl.api.Helpers;
 using hsl.api.Interfaces;
 using hsl.api.Models;
 using hsl.api.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebSockets.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Text;
 
 namespace hsl.api
 {
     public class Startup
     {
+        private const string SecretKey = "iNivDmHLpUA223sqsfhqGbMRdRj1PVkH"; // todo: get this from somewhere secure
+
+        private readonly SymmetricSecurityKey
+            _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,7 +35,6 @@ namespace hsl.api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             //allow to get user Id in BLL
             services.AddHttpContextAccessor();
 
@@ -33,21 +42,43 @@ namespace hsl.api
             services.AddCors();
 
             // setup mapper
-            var mappingConfig = new MapperConfiguration(mConfig =>
-            {
-                mConfig.AddProfile(new MappingProfile());
-            });
+            var mappingConfig = new MapperConfiguration(mConfig => { mConfig.AddProfile(new MappingProfile()); });
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
 #pragma warning disable CS0618 // Тип или член устарел
             services.AddAutoMapper();
 #pragma warning restore CS0618 // Тип или член устарел
 
+            //setup jwtToken
+            var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
+            services.Configure<JwtIssuerOptions>(op =>
+            {
+                op.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
+                op.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
+                op.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
+            });
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer  = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
+                
+                ValidateAudience = true,
+                ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
+                
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = _signingKey,
+                
+                RequireExpirationTime = false,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+
             // setup entity
             services.AddEntityFrameworkSqlServer().AddDbContext<hslapiContext>(options =>
-                 options.UseSqlServer(Configuration.GetConnectionString("hslapiContextConnection"),
-                 b => b.MigrationsAssembly("hsl.api")));
+                options.UseSqlServer(Configuration.GetConnectionString("hslapiContextConnection"),
+                    b => b.MigrationsAssembly("hsl.api")));
 
+            //setupIdentity
             var builder = services.AddIdentityCore<User>(o =>
             {
                 // configure identity options
@@ -63,9 +94,7 @@ namespace hsl.api
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             // Initialization dependency injection
-           // services.AddScoped<IRegistrationInterface, RegistrationService>();
-
-
+            // services.AddScoped<IRegistrationInterface, RegistrationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,9 +115,9 @@ namespace hsl.api
             app.UseHttpsRedirection();
             app.UseMvc();
             app.UseCors(options => options.AllowAnyOrigin()
-                                          .AllowAnyMethod()
-                                          .AllowAnyHeader()
-                                          .AllowCredentials());
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
         }
     }
 }
