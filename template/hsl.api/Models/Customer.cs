@@ -9,9 +9,9 @@ namespace hsl.api.Models
     {
         public int Id { get; set; }
         public string IdentityId { get; set; }
-        public User Identity { get; set; }  // navigation property
         public string Location { get; set; }
         public string Locale { get; set; }
         public string Gender { get; set; }
+        public User IdentityUser { get; set; }  // navigation property
     }
 }

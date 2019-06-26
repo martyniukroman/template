@@ -8,8 +8,9 @@ namespace hsl.api.Helpers
     {
         public MappingProfile()
         {
+            CreateMap<RegistrationUserViewModel, User>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
            // CreateMap<RegistrationUserViewModel, Customer>();
-            CreateMap<Customer, RegistrationUserViewModel>();
+           // CreateMap<Customer, RegistrationUserViewModel>();
         }
     }
 }

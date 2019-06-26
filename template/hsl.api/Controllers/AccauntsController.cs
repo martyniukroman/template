@@ -32,20 +32,19 @@ namespace hsl.api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] RegistrationUserViewModel model)
+        public async Task<IActionResult> PostUser([FromBody] RegistrationUserViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest( new { message = "Invalid registration model" });
 
             var userIdentity = _mapper.Map<User>(model);
 
             var result = await _userManager.CreateAsync(userIdentity, model.Password);
-
-            if(!result.Succeeded) return BadRequest( new { message = "Error on creating identity model" });
+            if(!result.Succeeded) return BadRequest( new { message = $"Error on creating identity model | " + result.ToString()});
 
 
             try
             {
-                await _context.Customers.AddAsync(new Customer { IdentityId = userIdentity.Id, Location = model.Location });
+                await _context.Customers.AddAsync(new Customer { IdentityId = userIdentity.Id, Location = model.Location});
                 _context.SaveChanges();
 
                 var newUser = _context.Customers.FirstOrDefault(x => x.IdentityId == userIdentity.Id);

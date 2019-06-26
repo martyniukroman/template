@@ -25,7 +25,6 @@ namespace hsl.api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             //allow to get user Id in BLL
             services.AddHttpContextAccessor();
@@ -39,6 +38,10 @@ namespace hsl.api
                 mConfig.AddProfile(new MappingProfile());
             });
             IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+#pragma warning disable CS0618 // Тип или член устарел
+            services.AddAutoMapper();
+#pragma warning restore CS0618 // Тип или член устарел
 
             // setup entity
             services.AddEntityFrameworkSqlServer().AddDbContext<hslapiContext>(options =>
@@ -56,6 +59,8 @@ namespace hsl.api
             });
             builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
             builder.AddEntityFrameworkStores<hslapiContext>().AddDefaultTokenProviders();
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             // Initialization dependency injection
            // services.AddScoped<IRegistrationInterface, RegistrationService>();
