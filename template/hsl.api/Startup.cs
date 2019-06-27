@@ -1,20 +1,18 @@
 ﻿using AutoMapper;
 using hsl.api.Helpers;
-using hsl.api.Interfaces;
 using hsl.api.Models;
-using hsl.api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebSockets.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
+
 
 namespace hsl.api
 {
@@ -60,18 +58,33 @@ namespace hsl.api
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
-                ValidIssuer  = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
-                
+                ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
+
                 ValidateAudience = true,
                 ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
-                
+
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = _signingKey,
-                
+
                 RequireExpirationTime = false,
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
             };
+            services.AddAuthentication(op =>
+            {
+                op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                op.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(configureOptions =>
+            {
+                configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions)];
+                configureOptions.TokenValidationParameters = tokenValidationParameters;
+                configureOptions.SaveToken = true;
+            });
+            services.AddAuthorization(op =>
+            {
+                op.AddPolicy("User", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol, Constants.Strings.JwtClaims.ApiAccess));
+                
+            });
 
             // setup entity
             services.AddEntityFrameworkSqlServer().AddDbContext<hslapiContext>(options =>
