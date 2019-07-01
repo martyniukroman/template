@@ -15,7 +15,7 @@ namespace hsl.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccauntsController : ControllerBase
+    public class AccauntsController : Controller
     {
         
         private readonly UserManager<User> _userManager;
