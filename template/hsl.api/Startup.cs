@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
+using hsl.api.Interfaces;
 
 
 namespace hsl.api
@@ -103,11 +104,12 @@ namespace hsl.api
             });
             builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
             builder.AddEntityFrameworkStores<hslapiContext>().AddDefaultTokenProviders();
-
+            services.AddAutoMapper();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             // Initialization dependency injection
             // services.AddScoped<IRegistrationInterface, RegistrationService>();
+            services.AddScoped<IJwtFactory, JwtFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -23,17 +23,13 @@ namespace hsl.api.Controllers
         {
             this._userManager = userManager;
             this._jwtFactory = jwtFactory;
-            this._jwtOptions = jwtOptions;
+            this._jwtOptions = jwtOptions.Value;
         }
 
         // POST api/auth/login
         [HttpPost("login")]
         public async Task<IActionResult> Post([FromBody] CredentialsViewModel creds)
         {
-            if (creds.isValid())
-                return BadRequest(new {message = "ValidationError"});
-
-
             var identity = await GetClaimsIdentity(creds.UserName, creds.Password);
             if (identity == null)
             {
