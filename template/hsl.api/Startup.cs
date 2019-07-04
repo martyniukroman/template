@@ -83,7 +83,8 @@ namespace hsl.api
             });
             services.AddAuthorization(op =>
             {
-                op.AddPolicy("User", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol, Constants.Strings.JwtClaims.ApiAccess));
+                op.AddPolicy("User", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol,
+                    Constants.Strings.JwtClaims.ApiAccess));
                 
             });
 
@@ -101,7 +102,10 @@ namespace hsl.api
                 o.Password.RequireUppercase = false;
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 6;
-            });
+                o.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<hslapiContext>()
+                .AddDefaultTokenProviders();
+            
             builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
             builder.AddEntityFrameworkStores<hslapiContext>().AddDefaultTokenProviders();
             services.AddAutoMapper();

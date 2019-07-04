@@ -53,7 +53,7 @@ namespace hsl.api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Error on working with DataBase" });
+                return BadRequest(new { message = "Error on working with DataBase", error = ex.Message });
             }
         }
 
