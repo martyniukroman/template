@@ -11,8 +11,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using hsl.api.Interfaces;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 
 namespace hsl.api
@@ -36,6 +41,7 @@ namespace hsl.api
         {
             //allow to get user Id in BLL
             services.AddHttpContextAccessor();
+            services.TryAddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
             //enable CORS
             services.AddCors();
@@ -74,18 +80,33 @@ namespace hsl.api
             services.AddAuthentication(op =>
             {
                 op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                op.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 op.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(configureOptions =>
             {
                 configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions)];
                 configureOptions.TokenValidationParameters = tokenValidationParameters;
                 configureOptions.SaveToken = true;
+                configureOptions.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/notifications")))
+                        {
+                            context.Token = accessToken;
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
             });
             services.AddAuthorization(op =>
             {
                 op.AddPolicy("User", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol,
                     Constants.Strings.JwtClaims.ApiAccess));
-                
             });
 
             // setup entity
@@ -95,17 +116,17 @@ namespace hsl.api
 
             //setupIdentity
             var builder = services.AddIdentityCore<User>(o =>
-            {
-                // configure identity options
-                o.Password.RequireDigit = false;
-                o.Password.RequireLowercase = false;
-                o.Password.RequireUppercase = false;
-                o.Password.RequireNonAlphanumeric = false;
-                o.Password.RequiredLength = 6;
-                o.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<hslapiContext>()
+                {
+                    // configure identity options
+                    o.Password.RequireDigit = false;
+                    o.Password.RequireLowercase = false;
+                    o.Password.RequireUppercase = false;
+                    o.Password.RequireNonAlphanumeric = false;
+                    o.Password.RequiredLength = 6;
+                    o.User.RequireUniqueEmail = true;
+                }).AddEntityFrameworkStores<hslapiContext>()
                 .AddDefaultTokenProviders();
-            
+
             builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
             builder.AddEntityFrameworkStores<hslapiContext>().AddDefaultTokenProviders();
             services.AddAutoMapper();
@@ -113,7 +134,7 @@ namespace hsl.api
 
             // Initialization dependency injection
             // services.AddScoped<IRegistrationInterface, RegistrationService>();
-            services.AddScoped<IJwtFactory, JwtFactory>();
+            services.AddSingleton<IJwtFactory, JwtFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -123,12 +144,26 @@ namespace hsl.api
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
 
+            app.UseExceptionHandler(
+                builder =>
+                {
+                    builder.Run(
+                        async context =>
+                        {
+                            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                            context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+                            var error = context.Features.Get<IExceptionHandlerFeature>();
+                            if (error != null)
+                            {
+                                await context.Response.WriteAsync(error.Error.Message).ConfigureAwait(false);
+                            }
+                        });
+                });
+
+
+            app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseHttpsRedirection();
