@@ -15,6 +15,8 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using hsl.api.Interfaces;
+using hsl.api.Services;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -51,9 +53,6 @@ namespace hsl.api
             var mappingConfig = new MapperConfiguration(mConfig => { mConfig.AddProfile(new MappingProfile()); });
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
-#pragma warning disable CS0618 // Тип или член устарел
-            services.AddAutoMapper();
-#pragma warning restore CS0618 // Тип или член устарел
 
             //setup jwtToken
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
@@ -80,33 +79,17 @@ namespace hsl.api
             };
             services.AddAuthentication(op =>
             {
-                op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                op.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;        
                 op.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(configureOptions =>
             {
-                configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions)];
+                configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
                 configureOptions.TokenValidationParameters = tokenValidationParameters;
                 configureOptions.SaveToken = true;
-                configureOptions.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        var accessToken = context.Request.Query["access_token"];
-                        var path = context.HttpContext.Request.Path;
-                        if (!string.IsNullOrEmpty(accessToken) &&
-                            (path.StartsWithSegments("/notifications")))
-                        {
-                            context.Token = accessToken;
-                        }
-
-                        return Task.CompletedTask;
-                    }
-                };
             });
             services.AddAuthorization(op =>
             {
-                op.AddPolicy("User", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol,
+                op.AddPolicy("ApiUser", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol,
                     Constants.Strings.JwtClaims.ApiAccess));
             });
 
@@ -114,7 +97,7 @@ namespace hsl.api
             services.AddEntityFrameworkSqlServer().AddDbContext<hslapiContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("hslapiContextConnection"),
                     b => b.MigrationsAssembly("hsl.api")));
-            
+
             //setupIdentity
             var builder = services.AddIdentityCore<User>(o =>
                 {
@@ -134,7 +117,7 @@ namespace hsl.api
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             // Initialization dependency injection
-            // services.AddScoped<IRegistrationInterface, RegistrationService>();
+            services.AddScoped<IRegistrationInterface, RegistrationService>();
             services.AddSingleton<IJwtFactory, JwtFactory>();
         }
 
@@ -152,7 +135,7 @@ namespace hsl.api
                     builder.Run(
                         async context =>
                         {
-                            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                            context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
                             context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
                             var error = context.Features.Get<IExceptionHandlerFeature>();
@@ -162,7 +145,6 @@ namespace hsl.api
                             }
                         });
                 });
-
 
             app.UseDefaultFiles();
             app.UseStaticFiles();

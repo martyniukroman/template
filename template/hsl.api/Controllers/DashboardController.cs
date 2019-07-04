@@ -11,37 +11,37 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hsl.api.Controllers
 {
-  //  [Authorize(Policy = "User")]
+    [Authorize(Policy = "ApiUser")]
     [Route("api/[controller]/[action]")]
     public class DashboardController : Controller
     {
-        private readonly hslapiContext _context;
         private readonly ClaimsPrincipal _caller;
+        private readonly hslapiContext _appDbContext;
 
-        public DashboardController(UserManager<User> userManager, hslapiContext hslapiContext, IHttpContextAccessor httpContextAccessor)
+        public DashboardController(UserManager<User> userManager, hslapiContext appDbContext, IHttpContextAccessor httpContextAccessor)
         {
-            _context = hslapiContext;
             _caller = httpContextAccessor.HttpContext.User;
+            _appDbContext = appDbContext;
         }
-
 
         // GET api/dashboard/home
         [HttpGet]
         public async Task<IActionResult> Home()
         {
-            try
+//            var userId = _caller.Claims.Single(c => c.Type == "id");
+//            var customer = await _appDbContext.Customers.Include(c => c.IdentityUser).SingleAsync(c => c.IdentityUser.Id == userId.Value);
+      
+            return new OkObjectResult(new
             {
-                var userId = _caller.Claims.FirstOrDefault(c => c.Type == "id");
-                var customer = await _context.Customers.Include(x => x.IdentityUser)
-                    .SingleAsync(x => x.IdentityUser.Id == userId.Value);
-
-                return new OkObjectResult( new {message = "Hello"});
-
-            }
-            catch (Exception e)
-            {
-                return BadRequest(new {message = "Core Error", error = e.Message + e.Source});
-            }
+                Message = "This is secure API and user data!",
+//                customer.IdentityUser.FirstName,
+//                customer.IdentityUser.LastName,
+//                customer.IdentityUser.PictureUrl,
+//                customer.IdentityUser.FacebookId,
+//                customer.Location,
+//                customer.Locale,
+//                customer.Gender
+            });
         }
     }
 }
