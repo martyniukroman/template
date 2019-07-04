@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hsl.api.Controllers
 {
-    [Authorize(Policy = "User")]
+  //  [Authorize(Policy = "User")]
     [Route("api/[controller]/[action]")]
     public class DashboardController : Controller
     {
@@ -35,7 +35,7 @@ namespace hsl.api.Controllers
                 var customer = await _context.Customers.Include(x => x.IdentityUser)
                     .SingleAsync(x => x.IdentityUser.Id == userId.Value);
 
-                return new OkObjectResult(customer);
+                return new OkObjectResult( new {message = "Hello"});
 
             }
             catch (Exception e)

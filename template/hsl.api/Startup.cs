@@ -18,13 +18,14 @@ using hsl.api.Interfaces;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IdentityModel.Protocols;
 
 
 namespace hsl.api
 {
     public class Startup
     {
-        private const string SecretKey = "iNivDmHLpUA223sqsfhqGbMRdRj1PVkH"; // todo: get this from somewhere secure
+        private const string SecretKey = "HelloWorldThisIsSecret"; // todo: get this from somewhere secure
 
         private readonly SymmetricSecurityKey
             _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
@@ -113,7 +114,7 @@ namespace hsl.api
             services.AddEntityFrameworkSqlServer().AddDbContext<hslapiContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("hslapiContextConnection"),
                     b => b.MigrationsAssembly("hsl.api")));
-
+            
             //setupIdentity
             var builder = services.AddIdentityCore<User>(o =>
                 {
