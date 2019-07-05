@@ -2,7 +2,9 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using hsl.api.Models;
+using hsl.api.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -18,7 +20,9 @@ namespace hsl.api.Controllers
         private readonly ClaimsPrincipal _caller;
         private readonly hslapiContext _appDbContext;
 
-        public DashboardController(UserManager<User> userManager, hslapiContext appDbContext, IHttpContextAccessor httpContextAccessor)
+        public DashboardController(
+            hslapiContext appDbContext,
+            IHttpContextAccessor httpContextAccessor)
         {
             _caller = httpContextAccessor.HttpContext.User;
             _appDbContext = appDbContext;
@@ -28,19 +32,24 @@ namespace hsl.api.Controllers
         [HttpGet]
         public async Task<IActionResult> Home()
         {
-//            var userId = _caller.Claims.Single(c => c.Type == "id");
-//            var customer = await _appDbContext.Customers.Include(c => c.IdentityUser).SingleAsync(c => c.IdentityUser.Id == userId.Value);
-      
+            var userId = _caller.Claims.Single(c => c.Type == "id");
+            var user = (from c in _appDbContext.Customers
+                join u in _appDbContext.Users on c.IdentityId equals u.Id
+                where c.IdentityId == userId.Value
+                      select new
+                      {
+                           id = u.Id,
+                           mail = u.Email,
+                           fName = u.FirstName,
+                           LName = u.FirstName,
+                           location = c.Location,
+                      });
+            
             return new OkObjectResult(new
             {
                 Message = "This is secure API and user data!",
-//                customer.IdentityUser.FirstName,
-//                customer.IdentityUser.LastName,
-//                customer.IdentityUser.PictureUrl,
-//                customer.IdentityUser.FacebookId,
-//                customer.Location,
-//                customer.Locale,
-//                customer.Gender
+                userId.Value,
+                user
             });
         }
     }

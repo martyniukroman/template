@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hsl.api.Models
 {
-    public class hslapiContext : IdentityDbContext<IdentityUser>
+    public class hslapiContext : IdentityDbContext<User>
     {
         public hslapiContext(DbContextOptions<hslapiContext> options)
             : base(options)
@@ -16,7 +16,6 @@ namespace hsl.api.Models
         }
 
         public DbSet<Customer> Customers { set; get; }
-        public DbSet<Phone> Phones { set; get; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

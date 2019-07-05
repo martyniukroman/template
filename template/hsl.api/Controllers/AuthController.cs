@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using hsl.api.Helpers;
 using hsl.api.Interfaces;
 using hsl.api.Models;
