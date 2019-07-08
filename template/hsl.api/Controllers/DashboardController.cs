@@ -32,6 +32,7 @@ namespace hsl.api.Controllers
         [HttpGet]
         public async Task<IActionResult> Home()
         {
+            // old but gold
             var userId = _caller.Claims.Single(c => c.Type == "id");
             var user = (from c in _appDbContext.Customers
                 join u in _appDbContext.Users on c.IdentityId equals u.Id
@@ -41,7 +42,7 @@ namespace hsl.api.Controllers
                            id = u.Id,
                            mail = u.Email,
                            fName = u.FirstName,
-                           LName = u.FirstName,
+                           LName = u.LastName,
                            location = c.Location,
                       });
             
