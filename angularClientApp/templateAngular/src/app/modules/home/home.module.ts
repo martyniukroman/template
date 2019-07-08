@@ -4,7 +4,7 @@ import { HeaderComponent } from './header/header.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import {RouterModule} from '@angular/router';
 import { FooterComponent } from './footer/footer.component';
-import {DxButtonModule} from 'devextreme-angular';
+import {DxButtonModule, DxTextBoxModule} from 'devextreme-angular';
 
 @NgModule({
   declarations: [
@@ -15,6 +15,7 @@ import {DxButtonModule} from 'devextreme-angular';
   imports: [
     CommonModule,
     DxButtonModule,
+    DxTextBoxModule,
     RouterModule.forChild([
       {path: '', component: HomePageComponent}
     ]),

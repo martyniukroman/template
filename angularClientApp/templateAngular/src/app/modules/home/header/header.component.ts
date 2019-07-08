@@ -7,13 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
+  public name: string = '';
+
   constructor() { }
 
   ngOnInit() {
   }
 
   public btnClick(): void{
-    alert('Hello User');
+    alert('Hello ' + this.name);
   }
 
 }
