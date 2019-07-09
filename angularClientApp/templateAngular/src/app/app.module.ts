@@ -4,8 +4,8 @@ import {LOCALE_ID, NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {RouterModule} from '@angular/router';
 import {HomeModule} from './modules/home/home.module';
-import {OtherModule} from "./modules/other/other.module";
-import {Page404Component} from "./modules/other/page404/page404.component";
+import {HomePageComponent} from "./modules/home/home-page/home-page.component";
+import {Page404Component} from "./modules/home/page404/page404.component";
 
 @NgModule({
   declarations: [
@@ -14,10 +14,10 @@ import {Page404Component} from "./modules/other/page404/page404.component";
   imports: [
     BrowserModule,
     HomeModule,
-    OtherModule,
     RouterModule.forRoot([
-      {path: 'home', loadChildren: './modules/home/home.module#HomeModule'},
-      {path: '', loadChildren: './modules/other/other.module#OtherModule'},
+      {path: '', component: HomePageComponent},
+      {path: 'home', component: HomePageComponent},
+      {path: 'other', loadChildren: './modules/other/other.module#OtherModule'},
       {path: '**', component: Page404Component},
     ]),
   ],

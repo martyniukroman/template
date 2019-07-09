@@ -5,12 +5,14 @@ import { HomePageComponent } from './home-page/home-page.component';
 import {RouterModule} from '@angular/router';
 import { FooterComponent } from './footer/footer.component';
 import {DxButtonModule, DxTextBoxModule} from 'devextreme-angular';
+import {Page404Component} from "./page404/page404.component";
 
 @NgModule({
   declarations: [
     HeaderComponent,
     HomePageComponent,
     FooterComponent,
+    Page404Component,
   ],
   imports: [
     CommonModule,
@@ -24,6 +26,7 @@ import {DxButtonModule, DxTextBoxModule} from 'devextreme-angular';
     HeaderComponent,
     HomePageComponent,
     FooterComponent,
+    Page404Component,
   ],
 })
 export class HomeModule { }
