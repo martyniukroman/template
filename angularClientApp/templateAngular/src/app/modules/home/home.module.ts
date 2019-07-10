@@ -6,6 +6,7 @@ import {RouterModule} from '@angular/router';
 import { FooterComponent } from './footer/footer.component';
 import {DxButtonModule, DxTextBoxModule} from 'devextreme-angular';
 import {Page404Component} from "./page404/page404.component";
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import {Page404Component} from "./page404/page404.component";
   ],
   imports: [
     CommonModule,
+    FlexLayoutModule,
     DxButtonModule,
     DxTextBoxModule,
     RouterModule.forChild([

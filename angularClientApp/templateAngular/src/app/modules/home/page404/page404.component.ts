@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-page404',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class Page404Component implements OnInit {
 
-  constructor() { }
+  public imgSource: string = 'http://lorempixel.com/720/480';
+
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
   }
 
 }
+//http://lorempixel.com/400/200/

@@ -13,9 +13,7 @@ import {RouterModule} from "@angular/router";
       {path: 'dashboard', component: DashboardComponent}
     ]),
   ],
-  exports: [
-    DashboardComponent,
-  ],
+  exports: [],
 })
 export class OtherModule {
 }

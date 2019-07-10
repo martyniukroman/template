@@ -6,7 +6,7 @@ import {RouterModule} from '@angular/router';
 import {HomeModule} from './modules/home/home.module';
 import {HomePageComponent} from "./modules/home/home-page/home-page.component";
 import {Page404Component} from "./modules/home/page404/page404.component";
-import {FlexLayoutModule} from "@angular/flex-layout";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -14,8 +14,8 @@ import {FlexLayoutModule} from "@angular/flex-layout";
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     HomeModule,
-    FlexLayoutModule,
     RouterModule.forRoot([
       {path: '', component: HomePageComponent},
       {path: 'home', component: HomePageComponent},
