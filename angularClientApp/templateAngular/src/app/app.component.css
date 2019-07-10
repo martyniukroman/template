@@ -1,0 +1,17 @@
+body, router-outlet, app-header, app-footer{
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+app-header{
+
+}
+
+router-outlet{
+}
+
+app-footer{
+  bottom: 0;
+}
+
