@@ -5,6 +5,7 @@ import { RegisterComponent } from './register/register.component';
 import {DxButtonModule, DxFormModule, DxTextBoxModule} from "devextreme-angular";
 import {DxiItemModule} from "devextreme-angular/ui/nested/item-dxi";
 import {FlexLayoutModule} from "@angular/flex-layout";
+import {DxiValidationRuleModule} from "devextreme-angular/ui/nested/validation-rule-dxi";
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import {FlexLayoutModule} from "@angular/flex-layout";
   imports: [
     DxFormModule,
     DxiItemModule,
+    DxiValidationRuleModule,
     DxTextBoxModule,
     DxButtonModule,
     FlexLayoutModule,

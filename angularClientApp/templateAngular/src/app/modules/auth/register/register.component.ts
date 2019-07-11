@@ -20,8 +20,8 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
   }
 
-  public onFormSubmit() {
-
+  public onFormSubmit(event) {
+    event.event.preventDefault();
   }
 
 }
