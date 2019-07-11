@@ -1,7 +1,12 @@
+@import "../../../app.component";
+
 #fatherDiv{
   width: 100%;
   height: 50px;
-  background-color: blue;
+  background-color: $systemBlack;
   margin: 0;
   padding: 0;
+}
+dx-button{
+  margin: 5px;
 }

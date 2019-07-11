@@ -1,0 +1,36 @@
+<div fxLayout="column" fxFlexAlign="center" fxLayoutAlign="center center">
+
+    <form action="/home" (submit)="onFormSubmit($event)">
+      <dx-form id="form"
+               [formData]="registerForm"
+               [readOnly]="false"
+               [showColonAfterLabel]="true"
+               [showValidationSummary]="true"
+               validationGroup="customerData">
+
+        <dxi-item class="option">
+          <p>Label</p>
+          <dx-text-box placeholder="Email"></dx-text-box>
+        </dxi-item>
+        <dxi-item class="option">
+          <p>Label</p>
+          <dx-text-box placeholder="Email"></dx-text-box>
+        </dxi-item>
+        <dxi-item class="option">
+          <p>Label</p>
+          <dx-text-box placeholder="Email"></dx-text-box>
+        </dxi-item>
+        <dxi-item class="option">
+          <p>Label</p>
+          <dx-text-box placeholder="Email"></dx-text-box>
+        </dxi-item>
+
+
+        <dxi-item
+          itemType="button"
+          [buttonOptions]="buttonOptions">
+        </dxi-item>
+
+      </dx-form>
+    </form>
+</div>

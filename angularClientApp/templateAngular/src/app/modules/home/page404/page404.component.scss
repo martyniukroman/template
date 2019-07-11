@@ -1,9 +1,14 @@
+@import "../../../app.component";
 h1{
   font-size: 100px;
+  color: black;
+  text-shadow: $systemWhite 3px 3px 0, $systemWhite -3px -3px 0;
 }
-p{
+p {
   margin-top: -20px;
   margin-bottom: 20px;
+  color: black;
+  text-shadow: $systemWhite 0 0 5px, $systemWhite 0 0 10px;
 }
 img{
   border-radius: 20px;
@@ -17,5 +22,9 @@ img{
   background-color: black;
 }
 #fatherDiv{
-  margin-top: 50px;
+  background-image: url("http://lorempixel.com/1280/720");
+  height: calc(100vh - 101px);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
 }

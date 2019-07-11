@@ -8,12 +8,9 @@ import {HttpClient} from "@angular/common/http";
 })
 export class Page404Component implements OnInit {
 
-  public imgSource: string = 'http://lorempixel.com/720/480';
-
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
   }
 
 }
-//http://lorempixel.com/400/200/

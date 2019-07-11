@@ -19,7 +19,11 @@ import {HttpClientModule} from "@angular/common/http";
     RouterModule.forRoot([
       {path: '', component: HomePageComponent},
       {path: 'home', component: HomePageComponent},
+
       {path: 'other', loadChildren: './modules/other/other.module#OtherModule'},
+      {path: 'auth', loadChildren: './modules/auth/auth.module#AuthModule'},
+
+      // this shit should be at the bottom and in such order
       {path: '**', redirectTo: '404'},
       {path: '404', component: Page404Component},
     ]),
