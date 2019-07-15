@@ -8,27 +8,20 @@ import {Observable, of} from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class DataServiceProvider extends BaseComponent{
+export class DataServiceProvider extends BaseComponent {
 
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient) {
     super();
   }
 
-  public getData(path: string = 'values'){
-
-    let response;
+  public getData(path: string = 'values') {
 
     return this.http.get<any>(appConfig.BaseApiUri + path)
       .pipe(
-        tap( _ => console.log('data service provider'),
+        tap(_ => console.log('data service provider'),
           catchError(this.handleError(path, [])),
         )
-      ).subscribe( data => {
-        console.log(data);
-        response = data;
-      });
-
-
+      );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

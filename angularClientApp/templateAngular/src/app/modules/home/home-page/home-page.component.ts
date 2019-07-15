@@ -9,13 +9,14 @@ import {DataServiceProvider} from '../../../shared/services/DataServiceProvider'
 })
 export class HomePageComponent extends BaseComponent {
 
+  stroke: any[] = [];
+
   constructor(private _dataS: DataServiceProvider) {
     super();
   }
 
-  ngOnInit() {
-    let response = this._dataS.getData();
-    console.log(response);
+  async ngOnInit() {
+    await this._dataS.getData().subscribe( x => this.stroke = x);
   }
 
   onA() {
