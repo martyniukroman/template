@@ -3,14 +3,18 @@ import {BehaviorSubject, Observable} from "rxjs";
 import {BaseService} from "./base.service";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {appConfig} from "../config";
+import {UserRegistrationModel} from '../models/UserRegistrationModel';
+import notify from 'devextreme/ui/notify';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UserAuthService extends BaseService {
 
   private _authNavStatusSource = new BehaviorSubject<boolean>(false);
   private loggedIn = false;
 
-  public baseUrl: string = '';
+  public baseUrl: string = 'https://localhost:5001/api/';
   public authNavStatus$ = this._authNavStatusSource.asObservable();
 
   private headers = appConfig.DefaultHeaders;
@@ -36,9 +40,11 @@ export class UserAuthService extends BaseService {
       },
       error => {
         console.log(error);
+        notify(error.toString(), 'error', 2000);
       }
     );
 
+    return response;
   }
 
   Login(userName, password) {

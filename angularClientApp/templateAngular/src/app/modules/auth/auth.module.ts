@@ -2,19 +2,20 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {RouterModule} from "@angular/router";
 import { RegisterComponent } from './register/register.component';
-import {DxButtonModule, DxFormModule, DxTextBoxModule} from "devextreme-angular";
+import {DxButtonModule, DxFormModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
 import {DxiItemModule} from "devextreme-angular/ui/nested/item-dxi";
 import {FlexLayoutModule} from "@angular/flex-layout";
-import {DxiValidationRuleModule} from "devextreme-angular/ui/nested/validation-rule-dxi";
+import {DxiValidationRuleModule} from 'devextreme-angular/ui/nested/validation-rule-dxi';
 
 @NgModule({
   declarations: [
     RegisterComponent,
   ],
   imports: [
+    DxValidatorModule,
+    DxiValidationRuleModule,
     DxFormModule,
     DxiItemModule,
-    DxiValidationRuleModule,
     DxTextBoxModule,
     DxButtonModule,
     FlexLayoutModule,

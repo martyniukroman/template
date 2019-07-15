@@ -1,57 +1,93 @@
 <div fxLayout="column" fxFlexAlign="center" fxLayoutAlign="center center">
 
-    <form (submit)="onFormSubmit($event)">
-      <dx-form id="form"
-               [formData]="registerForm"
-               [readOnly]="false"
-               [showColonAfterLabel]="true"
-               [showValidationSummary]="true"
-               validationGroup="customerData">
+  <form [action]="'/'" (submit)="onFormSubmit($event)">
+    <div class="dx-form-group-with-caption">
+      <span class="dx-form-group-caption">Register</span>
 
-        <dxi-item dataField="HireDate" editorType="dxDateBox" [editorOptions]="{ value: null, width: '100%' }">
-          <dxi-validation-rule type="required" message="Hire date is required"></dxi-validation-rule>
-        </dxi-item>
+      <br>
+      <hr>
+      <br>
 
-        <dxi-item class="option">
-          <p>Password</p>
-          <dx-text-box mode="password" placeholder="Password">
-            <dxi-validation-rule
-              type="required"
-              message="Required">
-            </dxi-validation-rule>
+      <div class="dx-field">
+        <div class="dx-field-label">First name</div>
+        <div class="dx-field-value">
+          <dx-text-box [(value)]="registerForm.firstName" placeholder="First name">
+            <dx-validator>
+              <dxi-validation-rule
+                type="required"
+                message="Required">
+              </dxi-validation-rule>
+            </dx-validator>
           </dx-text-box>
-        </dxi-item>
+        </div>
+      </div>
 
-        <dxi-item class="option">
-          <p>Confirm password</p>
-          <dx-text-box mode="password" placeholder="Password">
-            <dxi-validation-rule
-              type="required"
-              message="Required">
-            </dxi-validation-rule>
+      <div class="dx-field">
+        <div class="dx-field-label">Last name</div>
+        <div class="dx-field-value">
+          <dx-text-box [(value)]="registerForm.lastName" placeholder="Last name">
+            <dx-validator>
+              <dxi-validation-rule
+                type="required"
+                message="Required">
+              </dxi-validation-rule>
+            </dx-validator>
           </dx-text-box>
-        </dxi-item>
+        </div>
+      </div>
 
-        <dxi-item class="option">
-          <p>First name</p>
-          <dx-text-box placeholder="First name"></dx-text-box>
-        </dxi-item>
+      <div class="dx-field">
+        <div class="dx-field-label">Email</div>
+        <div class="dx-field-value">
+          <dx-text-box [(value)]="registerForm.email" placeholder="Email">
+            <dx-validator>
+              <dxi-validation-rule
+                type="required"
+                message="Required">
+              </dxi-validation-rule>
+              <dxi-validation-rule
+                type="custom"
+                message="Email not valid"
+                [validationCallback]="validateEmail">
+              </dxi-validation-rule>
+            </dx-validator>
+          </dx-text-box>
+        </div>
+      </div>
 
-        <dxi-item class="option">
-          <p>Last name</p>
-          <dx-text-box placeholder="Last name"></dx-text-box>
-        </dxi-item>
+      <div class="dx-field">
+        <div class="dx-field-label">Location</div>
+        <div class="dx-field-value">
+          <dx-text-box [(value)]="registerForm.location" placeholder="Location">
+            <dx-validator>
 
-        <dxi-item class="option">
-          <p>Location</p>
-          <dx-text-box placeholder="Location"></dx-text-box>
-        </dxi-item>
+            </dx-validator>
+          </dx-text-box>
+        </div>
+      </div>
 
-        <dxi-item
-          itemType="button"
-          [buttonOptions]="buttonOptions">
-        </dxi-item>
+      <div class="dx-field">
+        <div class="dx-field-label">Password</div>
+        <div class="dx-field-value">
+          <dx-text-box [(value)]="registerForm.password" mode="password" placeholder="Password">
+            <dx-validator>
+              <dxi-validation-rule
+                type="required"
+                message="Required">
+              </dxi-validation-rule>
+              <dxi-validation-rule
+                type="custom"
+                message="Passwords should match"
+                [validationCallback]="validatePassword">
+              </dxi-validation-rule>
+            </dx-validator>
+          </dx-text-box>
+        </div>
+      </div>
 
-      </dx-form>
-    </form>
+      <br>
+      <dx-button icon="todo" type="success" [useSubmitBehavior]="true" text="Submit"></dx-button>
+
+    </div>
+  </form>
 </div>

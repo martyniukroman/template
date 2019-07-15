@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {appConfig} from "../config";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ResponseDataProviderService {
 
   constructor(private http: HttpClient) { }
