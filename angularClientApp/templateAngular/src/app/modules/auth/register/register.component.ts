@@ -1,18 +1,19 @@
 import {Component, OnInit} from '@angular/core';
 import {UserRegistrationModel} from '../../../shared/models/UserRegistrationModel';
-import {UserAuthService} from '../../../shared/services/user-auth.service';
+import {BaseComponent} from '../../../shared/base.component';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent extends BaseComponent {
 
   public registerForm: UserRegistrationModel = new UserRegistrationModel();
   public passwordConfirm: string = '';
 
-  constructor(private _authService: UserAuthService) {
+  constructor() {
+    super();
   }
 
   ngOnInit() {
@@ -21,13 +22,7 @@ export class RegisterComponent implements OnInit {
   public onFormSubmit(event) {
     event.preventDefault();
 
-    let response = this._authService.Register(this.registerForm.email,
-      this.registerForm.password,
-      this.registerForm.firstName,
-      this.registerForm.lastName,
-      this.registerForm.location);
-
-    console.log(response)
+    this.SuccessNotification();
 
   }
 

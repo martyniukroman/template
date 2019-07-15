@@ -4,9 +4,10 @@ import {LOCALE_ID, NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {RouterModule} from '@angular/router';
 import {HomeModule} from './modules/home/home.module';
-import {HomePageComponent} from "./modules/home/home-page/home-page.component";
-import {Page404Component} from "./modules/home/page404/page404.component";
-import {HttpClientModule} from "@angular/common/http";
+import {HomePageComponent} from './modules/home/home-page/home-page.component';
+import {Page404Component} from './modules/home/page404/page404.component';
+import {HttpClientModule} from '@angular/common/http';
+import {TokenService} from './shared/services/token-service';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,13 @@ import {HttpClientModule} from "@angular/common/http";
       {path: '404', component: Page404Component},
     ]),
   ],
-  providers: [{provide: LOCALE_ID, useValue: 'ru'}],
+  providers: [
+    {
+      provide: LOCALE_ID, useValue: 'ru',
+      useClass: TokenService,
+      multi: true,
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
