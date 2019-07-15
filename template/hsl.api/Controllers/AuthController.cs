@@ -5,6 +5,7 @@ using hsl.api.Helpers;
 using hsl.api.Interfaces;
 using hsl.api.Models;
 using hsl.api.ViewModels;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -40,7 +41,7 @@ namespace hsl.api.Controllers
 
             var jwt = await TokensHelper.GenerateJwt(identity, _jwtFactory, creds.UserName, _jwtOptions,
                 new JsonSerializerSettings {Formatting = Formatting.Indented});
-            
+
             return new OkObjectResult(jwt);
         }
 

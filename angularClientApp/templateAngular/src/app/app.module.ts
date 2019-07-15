@@ -6,8 +6,8 @@ import {RouterModule} from '@angular/router';
 import {HomeModule} from './modules/home/home.module';
 import {HomePageComponent} from './modules/home/home-page/home-page.component';
 import {Page404Component} from './modules/home/page404/page404.component';
-import {HttpClientModule} from '@angular/common/http';
-import {TokenService} from './shared/services/token-service';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {TokenInterceptorService} from './shared/services/token-Interceptor.service';
 
 @NgModule({
   declarations: [
@@ -31,8 +31,12 @@ import {TokenService} from './shared/services/token-service';
   ],
   providers: [
     {
-      provide: LOCALE_ID, useValue: 'ru',
-      useClass: TokenService,
+      provide: LOCALE_ID,
+      useValue: 'ru'
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
       multi: true,
     }
   ],

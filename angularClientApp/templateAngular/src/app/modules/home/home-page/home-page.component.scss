@@ -1,3 +1,9 @@
 #fatherDiv{
   height: calc(100vh - 100px);
 }
+dx-button{
+  &:hover {
+  //  transform: translateY(0.7em);
+ //   transition: transform 1s cubic-bezier(0, 1, 1, 1); // prikol
+  }
+}

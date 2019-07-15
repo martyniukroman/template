@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace hsl.api.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("CorsPolicy")]
     [ApiController]
     public class ValuesController : ControllerBase
     {

@@ -51,10 +51,10 @@ export abstract class BaseComponent implements OnInit {
       shading: true
     }, 'error', 3000);
 
-    console.log('--- Service notification ---');
-    console.log('--- type: ERROR');
-    console.log('--- text: ' + text);
-    console.log('----------------------------');
+    console.error('--- Service notification ---');
+    console.error('--- type: ERROR');
+    console.error('--- text: ' + text);
+    console.error('----------------------------');
 
   }
 

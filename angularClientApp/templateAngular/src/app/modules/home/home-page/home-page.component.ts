@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {BaseComponent} from '../../../shared/base.component';
+import {DataServiceProvider} from '../../../shared/services/DataServiceProvider';
 
 @Component({
   selector: 'app-home-page',
@@ -8,11 +9,13 @@ import {BaseComponent} from '../../../shared/base.component';
 })
 export class HomePageComponent extends BaseComponent {
 
-  constructor() {
+  constructor(private _dataS: DataServiceProvider) {
     super();
   }
 
   ngOnInit() {
+    let response = this._dataS.getData();
+    console.log(response);
   }
 
   onA() {

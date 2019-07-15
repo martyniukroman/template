@@ -19,6 +19,7 @@ using hsl.api.Services;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Protocols;
 
@@ -48,6 +49,20 @@ namespace hsl.api
 
             //enable CORS
             services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    x => x.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                );
+            });
+
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("CorsPolicy"));
+            });
 
             // setup mapper
             var mappingConfig = new MapperConfiguration(mConfig => { mConfig.AddProfile(new MappingProfile()); });
@@ -79,7 +94,7 @@ namespace hsl.api
             };
             services.AddAuthentication(op =>
             {
-                op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;        
+                op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 op.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(configureOptions =>
             {
@@ -151,10 +166,7 @@ namespace hsl.api
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
-            app.UseCors(options => options.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials());
+            app.UseCors("CorsPolicy");
         }
     }
 }
