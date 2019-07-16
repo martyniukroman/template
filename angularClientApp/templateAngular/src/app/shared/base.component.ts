@@ -3,7 +3,12 @@ import notify from 'devextreme/ui/notify';
 
 export abstract class BaseComponent implements OnInit {
 
-  protected constructor(){}
+  protected readonly isLogined: boolean = false;
+
+  protected constructor() {
+    let token = localStorage.getItem('token');
+    this.isLogined = !!token;
+  }
 
   ngOnInit(): void {
   }
@@ -18,6 +23,7 @@ export abstract class BaseComponent implements OnInit {
     console.log('----------------------------');
 
   }
+
   protected SuccessNotification(text: string = 'Success'): void {
     notify({
       message: text,
@@ -31,6 +37,7 @@ export abstract class BaseComponent implements OnInit {
     console.log('----------------------------');
 
   }
+
   protected WarningNotification(text: string = 'Warning'): void {
     notify({
       message: text,
@@ -44,6 +51,7 @@ export abstract class BaseComponent implements OnInit {
     console.log('----------------------------');
 
   }
+
   protected ErrorNotification(text: string = 'Error'): void {
     notify({
       message: text,

@@ -1,0 +1,44 @@
+<div fxLayout="column" fxFlexAlign="center" fxLayoutAlign="center center">
+
+  <form [action]="'/'" (submit)="onFormSubmit($event)">
+    <div class="dx-form-group-with-caption">
+      <span class="dx-form-group-caption">SignIn</span>
+
+      <br>
+      <hr>
+      <br>
+
+      <div class="dx-field">
+        <div class="dx-field-label">Email</div>
+        <div class="dx-field-value">
+          <dx-text-box [(value)]="email" placeholder="Email">
+            <dx-validator>
+              <dxi-validation-rule
+                type="required"
+                message="Required">
+              </dxi-validation-rule>
+            </dx-validator>
+          </dx-text-box>
+        </div>
+      </div>
+
+      <div class="dx-field">
+        <div class="dx-field-label">Password</div>
+        <div class="dx-field-value">
+          <dx-text-box [(value)]="password" mode="password" placeholder="Password">
+            <dx-validator>
+              <dxi-validation-rule
+                type="required"
+                message="Required">
+              </dxi-validation-rule>
+            </dx-validator>
+          </dx-text-box>
+        </div>
+      </div>
+
+      <br>
+      <dx-button icon="todo" type="success" [useSubmitBehavior]="true" text="SignIn"></dx-button>
+
+    </div>
+  </form>
+</div>

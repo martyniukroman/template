@@ -6,10 +6,12 @@ import {DxButtonModule, DxFormModule, DxTextBoxModule, DxValidatorModule} from '
 import {DxiItemModule} from "devextreme-angular/ui/nested/item-dxi";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {DxiValidationRuleModule} from 'devextreme-angular/ui/nested/validation-rule-dxi';
+import { SignInComponent } from './sign-in/sign-in.component';
 
 @NgModule({
   declarations: [
     RegisterComponent,
+    SignInComponent,
   ],
   imports: [
     DxValidatorModule,
@@ -21,7 +23,8 @@ import {DxiValidationRuleModule} from 'devextreme-angular/ui/nested/validation-r
     FlexLayoutModule,
     CommonModule,
     RouterModule.forChild([
-      {path: 'register', component: RegisterComponent}
+      {path: 'register', component: RegisterComponent},
+      {path: 'signin', component: SignInComponent}
     ]),
   ]
 })
