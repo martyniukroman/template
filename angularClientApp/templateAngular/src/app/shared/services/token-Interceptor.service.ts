@@ -36,27 +36,24 @@ export class TokenInterceptorService implements HttpInterceptor {
       headers: req.headers.set('Accept', 'application/json')
     });
 
-    return next.handle(req).pipe(
-      map((event: HttpEvent<any>) => {
-        if (event instanceof HttpResponse) {
-          console.log('event--->>>', event);
-        }
-        return event;
-      }),
-      catchError((error: HttpErrorResponse) => {
-        console.log('error--->>>', error);
+    return next.handle(req);
 
-        let errorString = '';
-
-        if (!error.ok){
-
-          errorString += 'Status: ' + error.status + ' ' + error.statusText + ' Details: ';
-          errorString += error.error.message;
-
-          this.RaiseErrorMessage(errorString);
-        }
-        return throwError(error);
-      }));
+    // return next.handle(req).pipe(
+    //   map((event: HttpEvent<any>) => {
+    //     return event;
+    //   }),
+    //   catchError((error: HttpErrorResponse) => {
+    //     let errorString = '';
+    //
+    //     if (!error.ok){
+    //
+    //       errorString += 'Status: ' + error.status + ' ' + error.statusText + ' Details: ';
+    //       errorString += error.error.message;
+    //
+    //       this.RaiseErrorMessage(errorString);
+    //     }
+    //     return throwError(error);
+    //   }));
 
   }
 

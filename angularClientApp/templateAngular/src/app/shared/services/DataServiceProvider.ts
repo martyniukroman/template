@@ -14,9 +14,18 @@ export class DataServiceProvider extends BaseComponent {
     super();
   }
 
-  public getData(path: string = 'values') {
+  public async getData(path: string = 'values') {
 
-    return this.http.get<any>(appConfig.BaseApiUri + path);
+    let promise = this.http.get<any>(appConfig.BaseApiUri + path).toPromise();
+    promise.catch( error => {
+      console.log('DataServiceProvider: ', error);
+    });
+    promise.then( response => {
+      console.log('DataServiceProvider: ', response);
+    });
+
+    return promise;
+
   }
 
 }

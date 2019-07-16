@@ -17,10 +17,10 @@ export abstract class BaseComponent implements OnInit {
 
     alert(text);
 
-    console.log('--- Service notification ---');
-    console.log('--- type: ALERT');
-    console.log('--- text: ' + text);
-    console.log('----------------------------');
+    // console.log('--- Service notification ---');
+    // console.log('--- type: ALERT');
+    // console.log('--- text: ' + text);
+    // console.log('----------------------------');
 
   }
 
@@ -31,10 +31,10 @@ export abstract class BaseComponent implements OnInit {
       shading: false
     }, 'success', 1000);
 
-    console.log('--- Service notification ---');
-    console.log('--- type: SUCCESS');
-    console.log('--- text: ' + text);
-    console.log('----------------------------');
+    // console.log('--- Service notification ---');
+    // console.log('--- type: SUCCESS');
+    // console.log('--- text: ' + text);
+    // console.log('----------------------------');
 
   }
 
@@ -45,10 +45,10 @@ export abstract class BaseComponent implements OnInit {
       shading: false
     }, 'warning', 2000);
 
-    console.log('--- Service notification ---');
-    console.log('--- type: WARNING');
-    console.log('--- text: ' + text);
-    console.log('----------------------------');
+    // console.log('--- Service notification ---');
+    // console.log('--- type: WARNING');
+    // console.log('--- text: ' + text);
+    // console.log('----------------------------');
 
   }
 
@@ -59,10 +59,10 @@ export abstract class BaseComponent implements OnInit {
       shading: true
     }, 'error', 3000);
 
-    console.error('--- Service notification ---');
-    console.error('--- type: ERROR');
-    console.error('--- text: ' + text);
-    console.error('----------------------------');
+    // console.error('--- Service notification ---');
+    // console.error('--- type: ERROR');
+    // console.error('--- text: ' + text);
+    // console.error('----------------------------');
 
   }
 

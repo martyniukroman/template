@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BaseComponent} from '../../../shared/base.component';
+import {AuthService} from '../../../shared/services/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -13,13 +15,32 @@ export class SignInComponent extends BaseComponent {
   public password: string;
   public email: string;
 
-  constructor() { super(); }
+  constructor(private _authService: AuthService, private _router: Router) {
+    super();
+  }
 
   ngOnInit() {
   }
 
-  public onFormSubmit(){
+  public onFormSubmit(event) {
+    let response;
+    event.preventDefault();
+
+    this._authService.Login(
+      {
+        userName: this.email,
+        password: this.password
+      }).subscribe(data => {
+      response = JSON.parse(data);
+      console.log(response);
+      if (response.auth_token) {
+        localStorage.setItem('token', response.auth_token);
+        location.reload();
+        this._router.navigate(['/home']);
+      }
+    });
 
   }
+
 
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {BaseComponent} from '../../../shared/base.component';
+import {AuthService} from '../../../shared/services/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +12,7 @@ export class HeaderComponent extends BaseComponent {
 
   public name: string = '';
 
-  constructor() { super(); }
+  constructor(private _auth: AuthService, private _router: Router) { super(); }
 
   ngOnInit() {
   }
@@ -19,4 +21,9 @@ export class HeaderComponent extends BaseComponent {
     alert('Hello ' + this.name);
   }
 
+  public SignOut(){
+    this._auth.Logout();
+    this._router.navigate(['/auth/signin']);
+    location.reload();
+  }
 }

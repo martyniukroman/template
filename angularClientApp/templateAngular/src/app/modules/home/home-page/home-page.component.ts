@@ -16,7 +16,7 @@ export class HomePageComponent extends BaseComponent {
   }
 
   async ngOnInit() {
-    await this._dataS.getData().subscribe( x => this.stroke = x);
+    this.stroke = await this._dataS.getData();
   }
 
   onA() {
