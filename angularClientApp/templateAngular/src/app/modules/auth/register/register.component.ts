@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {UserRegistrationModel} from '../../../shared/models/UserRegistrationModel';
 import {BaseComponent} from '../../../shared/base.component';
+import {AuthService} from '../../../shared/services/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +14,7 @@ export class RegisterComponent extends BaseComponent {
   public registerForm: UserRegistrationModel = new UserRegistrationModel();
   public passwordConfirm: string = '';
 
-  constructor() {
+  constructor(private _authService: AuthService, private _router: Router) {
     super();
   }
 
@@ -21,8 +23,16 @@ export class RegisterComponent extends BaseComponent {
 
   public onFormSubmit(event) {
     event.preventDefault();
+    let response;
+    this._authService.Register(this.registerForm).subscribe(
+      x => response = x
+    );
 
-    this.SuccessNotification();
+    if(response.ok){
+      this.SuccessNotification();
+      this._router.navigate(['/auth/signin']);
+      console.log(response);
+    }
 
   }
 

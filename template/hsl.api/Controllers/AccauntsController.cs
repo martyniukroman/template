@@ -17,7 +17,7 @@ namespace hsl.api.Controllers
     [ApiController]
     public class AccauntsController : Controller
     {
-        
+
         private readonly UserManager<User> _userManager;
    //     private readonly IRegistrationInterface _registrationService;
         private readonly IMapper _mapper;

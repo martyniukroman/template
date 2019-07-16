@@ -16,23 +16,7 @@ export class DataServiceProvider extends BaseComponent {
 
   public getData(path: string = 'values') {
 
-    return this.http.get<any>(appConfig.BaseApiUri + path)
-      .pipe(
-        tap(_ => console.log('data service provider'),
-          catchError(this.handleError(path, [])),
-        )
-      );
-  }
-
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-
-      this.ErrorNotification(error);
-      this.ErrorNotification(`${operation} failed: ${error.message}`);
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
+    return this.http.get<any>(appConfig.BaseApiUri + path);
   }
 
 }
