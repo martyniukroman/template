@@ -2,5 +2,5 @@
   <dx-button icon="home" [routerLink]="'/home'" stylingMode="text"></dx-button>
   <dx-button *ngIf="isLogined" (onClick)="SignOut()" stylingMode="text" text="Sign Out"></dx-button>
   <dx-button *ngIf="!isLogined" [routerLink]="'/auth/register'" stylingMode="text" text="Register"></dx-button>
-  <dx-button *ngIf="!isLogined" [routerLink]="'/auth/signin'" stylingMode="text" text="SignIn"></dx-button>
+  <dx-button *ngIf="!isLogined" [routerLink]="'/auth/signin'" stylingMode="text" text="Login"></dx-button>
 </div>

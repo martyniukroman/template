@@ -34,34 +34,37 @@ export class AuthService extends BaseComponent {
 
   public Register(data: any) {
 
-    let promise = this._httpClient.post<any>(appConfig.BaseApiUri + 'accaunts', data).toPromise();
+    // let promise = this._httpClient.post<any>(appConfig.BaseApiUri + 'accaunts', data).toPromise();
+    //
+    // let mitka: boolean = false;
+    // let errorModel: any = null;
+    //
+    // promise.catch(error => {
+    //   console.log('Register Error: ', error);
+    //
+    //   if (!error.ok) {
+    //     mitka = true;
+    //     errorModel = new ErrorResponseModel({
+    //       isOk: error.ok,
+    //       apiUrl: error.url,
+    //       statusCode: error.status,
+    //       statusText: error.statusText,
+    //       httpMessage: error.message,
+    //       coreMessage: error.error.message
+    //     });
+    //   }
+    //
+    //   this.ErrorNotification(errorModel.coreMessage);
+    // });
+    // promise.then( response => {
+    //   console.log('Register : ', response);
+    // });
+    //
+    // // if (mitka) return errorModel;
+    // return promise;
 
-    let mitka: boolean = false;
-    let errorModel: any = null;
+    return this._httpClient.post<any>(appConfig.BaseApiUri + 'accaunts', data);
 
-    promise.catch(error => {
-      console.log('Register Error: ', error);
-
-      if (!error.ok) {
-        mitka = true;
-        errorModel = new ErrorResponseModel({
-          isOk: error.ok,
-          apiUrl: error.url,
-          statusCode: error.status,
-          statusText: error.statusText,
-          httpMessage: error.message,
-          coreMessage: error.error.message
-        });
-      }
-
-      this.ErrorNotification(errorModel.coreMessage);
-    });
-    promise.then( response => {
-      console.log('Register : ', response);
-    });
-
-    // if (mitka) return errorModel;
-    return promise;
   }
 
   Logout() {

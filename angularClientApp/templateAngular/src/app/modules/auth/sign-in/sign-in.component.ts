@@ -31,12 +31,11 @@ export class SignInComponent extends BaseComponent {
         userName: this.email,
         password: this.password
       }).subscribe(data => {
+
       response = JSON.parse(data);
-      console.log(response);
       if (response.auth_token) {
         localStorage.setItem('token', response.auth_token);
-        location.reload();
-        this._router.navigate(['/home']);
+        this._router.navigate(['/home']).finally(() => location.reload());
       }
     });
 

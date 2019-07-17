@@ -24,14 +24,21 @@ export class RegisterComponent extends BaseComponent {
   public onFormSubmit(event) {
     event.preventDefault();
 
-    let response = this._authService.Register(this.registerForm);
-    console.log('response in comp');
-    console.log(response);
-    // if(response){
-    //   this.SuccessNotification();
-    //   this._router.navigate(['/auth/signin']);
-    //   console.log(response);
-    // }
+    this._authService.Register(this.registerForm).subscribe( response => {
+
+      console.log('response');
+      console.log(response);
+
+      if (response.id){
+        this.SuccessNotification('Your account successfully created');
+        this._router.navigate(['/auth/signin']);
+      }
+      else{
+        this.ErrorNotification('error');
+      }
+
+    });
+
 
   }
 

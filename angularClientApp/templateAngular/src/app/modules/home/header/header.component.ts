@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BaseComponent} from '../../../shared/base.component';
 import {AuthService} from '../../../shared/services/auth.service';
 import {Router} from '@angular/router';
@@ -12,18 +12,21 @@ export class HeaderComponent extends BaseComponent {
 
   public name: string = '';
 
-  constructor(private _auth: AuthService, private _router: Router) { super(); }
+  constructor(private _auth: AuthService, private _router: Router) {
+    super();
+  }
 
   ngOnInit() {
   }
 
-  public btnClick(): void{
+  public btnClick(): void {
     alert('Hello ' + this.name);
   }
 
-  public SignOut(){
+  public SignOut() {
     this._auth.Logout();
-    this._router.navigate(['/auth/signin']);
-    location.reload();
+    this._router.navigate(['/auth/signin']).finally(() => {
+      location.reload();
+    });
   }
 }

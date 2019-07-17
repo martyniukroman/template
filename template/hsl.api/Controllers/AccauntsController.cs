@@ -39,7 +39,7 @@ namespace hsl.api.Controllers
             var userIdentity = _mapper.Map<User>(model);
 
             var result = await _userManager.CreateAsync(userIdentity, model.Password);
-            if(!result.Succeeded) return BadRequest( new { message = $"Error on creating identity model | " + result.ToString()});
+            if(!result.Succeeded) return BadRequest( new { message = result.ToString()});
 
 
             try
@@ -53,7 +53,7 @@ namespace hsl.api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Error on working with DataBase" });
+                return BadRequest(new { message = "DataBase error" });
             }
         }
 
