@@ -1,10 +1,9 @@
-<h1>dashboard works! h1</h1>
-<h2>dashboard works! h2</h2>
-<h3>dashboard works! h3</h3>
-<h4>dashboard works! h4</h4>
-<h5>dashboard works! h5</h5>
-<h6>dashboard works! h6</h6>
-<p>dashboard works! p</p>
-dashboard works!
-<div style="height: 50px; margin-top: 50px; width: 50px; background-color: black">
+<div class="fatherDiv" fxLayout="row" fxLayoutAlign="center center">
+  <div>
+    <p>{{responseData?.user[0].id}}</p>
+    <p>{{responseData?.user[0].fName}}</p>
+    <p>{{responseData?.user[0].lName}}</p>
+    <p>{{responseData?.user[0].location}}</p>
+    <p>{{responseData?.user[0].mail}}</p>
+  </div>
 </div>
