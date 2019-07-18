@@ -41,10 +41,12 @@ namespace hsl.api.Controllers
             var result = await _userManager.CreateAsync(userIdentity, model.Password);
             if(!result.Succeeded) return BadRequest( new { message = result.ToString()});
 
-
             try
             {
-                await _context.Customers.AddAsync(new Customer { IdentityId = userIdentity.Id, Location = model.Location});
+                //     DONT FORGET TO ADD CUSTOM FIELDS HERE
+                await _context.Customers.AddAsync(new Customer { IdentityId = userIdentity.Id,
+                    Location = model.Location,
+                    Gender = model.Gender});
                 _context.SaveChanges();
 
                 var newUser = _context.Customers.FirstOrDefault(x => x.IdentityId == userIdentity.Id);

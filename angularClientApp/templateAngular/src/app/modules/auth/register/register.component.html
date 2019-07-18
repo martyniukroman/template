@@ -67,6 +67,17 @@
       </div>
 
       <div class="dx-field">
+        <div class="dx-field-label">Gender</div>
+        <div class="dx-field-value">
+          <dx-text-box [(value)]="registerForm.gender" placeholder="Gender">
+            <dx-validator>
+
+            </dx-validator>
+          </dx-text-box>
+        </div>
+      </div>
+
+      <div class="dx-field">
         <div class="dx-field-label">Password</div>
         <div class="dx-field-value">
           <dx-text-box [(value)]="registerForm.password" mode="password" placeholder="Password">

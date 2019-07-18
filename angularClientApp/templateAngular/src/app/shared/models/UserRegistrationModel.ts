@@ -4,4 +4,5 @@ export class UserRegistrationModel {
   firstName: string;
   lastName: string;
   location: string;
+  gender: string;
 }

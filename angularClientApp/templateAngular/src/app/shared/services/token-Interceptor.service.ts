@@ -63,7 +63,7 @@ export class TokenInterceptorService implements HttpInterceptor {
     notify({
       message: text,
       closeOnClick: true,
-      shading: true
+      shading: false
     }, 'error', 3000);
   }
 

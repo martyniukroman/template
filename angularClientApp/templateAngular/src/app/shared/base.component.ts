@@ -56,7 +56,7 @@ export abstract class BaseComponent implements OnInit {
     notify({
       message: text,
       closeOnClick: true,
-      shading: true
+      shading: false
     }, 'error', 3000);
 
     // console.error('--- Service notification ---');
