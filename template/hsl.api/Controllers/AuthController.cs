@@ -1,4 +1,7 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using hsl.api.Helpers;
@@ -9,6 +12,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
 namespace hsl.api.Controllers
@@ -58,5 +62,6 @@ namespace hsl.api.Controllers
 
             return await Task.FromResult<ClaimsIdentity>(null);
         }
+
     }
 }

@@ -4,3 +4,21 @@ body{
   color: #f6f1ed;
   background-color: #505050;
 }
+.loader {
+  border: 16px solid #b5b5b5; /* Light grey */
+  border-top: 16px solid #f6f6f6; /* Blue */
+  border-radius: 50%;
+  width: 60px;
+  margin: auto;
+  height: 60px;
+  animation: spin 2s linear infinite;
+}
+.positioner{
+  margin: 50vh auto auto;
+}
+
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

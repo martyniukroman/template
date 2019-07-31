@@ -16,13 +16,21 @@ namespace hsl.api.Models
         }
 
         public DbSet<Customer> Customers { set; get; }
+        public DbSet<Good> Goods { set; get; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
+            builder.Entity<RefreshToken>()
+                .HasAlternateKey(c => c.UserId)
+                .HasName("refreshToken_UserId");
+
+            builder.Entity<RefreshToken>()
+                .HasAlternateKey(c => c.Token)
+                .HasName("refreshToken_Token");
+
             base.OnModelCreating(builder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
         }
     }
 }

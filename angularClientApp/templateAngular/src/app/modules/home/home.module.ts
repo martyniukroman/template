@@ -4,7 +4,7 @@ import { HeaderComponent } from './header/header.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import {RouterModule} from '@angular/router';
 import { FooterComponent } from './footer/footer.component';
-import {DxButtonModule, DxTextBoxModule} from 'devextreme-angular';
+import {DxButtonModule, DxLoadIndicatorModule, DxTextBoxModule} from 'devextreme-angular';
 import {Page404Component} from "./page404/page404.component";
 import {FlexLayoutModule} from "@angular/flex-layout";
 
@@ -19,6 +19,7 @@ import {FlexLayoutModule} from "@angular/flex-layout";
     CommonModule,
     FlexLayoutModule,
     DxButtonModule,
+    DxLoadIndicatorModule,
     DxTextBoxModule,
     RouterModule.forChild([
       {path: '', component: HomePageComponent}
