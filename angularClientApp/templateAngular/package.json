@@ -1,6 +1,6 @@
 {
   "name": "template-angular",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -21,6 +21,9 @@
     "@angular/platform-browser": "~8.1.0",
     "@angular/platform-browser-dynamic": "~8.1.0",
     "@angular/router": "~8.1.0",
+    "@ngx-loading-bar/core": "^4.2.0",
+    "@ngx-loading-bar/http": "^4.2.0",
+    "@ngx-loading-bar/http-client": "^4.2.0",
     "angular-loading-bar": "^0.9.0",
     "devextreme": "19.1.4",
     "devextreme-angular": "19.1.4",
