@@ -5,8 +5,8 @@ body{
   background-color: #505050;
 }
 .loader {
-  border: 16px solid #b5b5b5; /* Light grey */
-  border-top: 16px solid #f6f6f6; /* Blue */
+  border: 10px solid #b5b5b5; /* Light grey */
+  border-top: 10px solid #f6f6f6; /* Blue */
   border-radius: 50%;
   width: 60px;
   margin: auto;
@@ -14,7 +14,7 @@ body{
   animation: spin 2s linear infinite;
 }
 .positioner{
-  margin: 50vh auto auto;
+  margin: calc(50vh - 60px) auto auto;
 }
 
 

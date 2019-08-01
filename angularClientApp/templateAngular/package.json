@@ -21,9 +21,11 @@
     "@angular/platform-browser": "~8.1.0",
     "@angular/platform-browser-dynamic": "~8.1.0",
     "@angular/router": "~8.1.0",
+    "angular-loading-bar": "^0.9.0",
     "devextreme": "19.1.4",
     "devextreme-angular": "19.1.4",
     "devextreme-schematics": "^1.0.8",
+    "ngx-loading-bar": "0.0.9",
     "rxjs": "~6.4.0",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"

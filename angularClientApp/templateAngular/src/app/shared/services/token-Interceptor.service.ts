@@ -5,11 +5,12 @@ import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import notify from 'devextreme/ui/notify';
 import {BaseComponent} from '../base.component';
+import {AuthService} from './auth.service';
 
 @Injectable()
 export class TokenInterceptorService implements HttpInterceptor {
 
-  constructor(private _router: Router) {
+  constructor(private _router: Router, private _authService: AuthService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -46,13 +47,26 @@ export class TokenInterceptorService implements HttpInterceptor {
         let errorString = '';
 
         if (!error.ok){
+
+          console.log('error->');
+          console.log(error);
+
           errorString += error.status + ' ' + error.statusText;
 
           if (error.error && error.error.message){
             errorString += ' ' + error.error.message;
           }
 
+          if (error.status == 401){
+            this._authService.Logout();
+            this._router.navigateByUrl('/auth/signin');
+          }
+          if (error.status == 0){
+            errorString = 'No connection';
+          }
+
           this.RaiseErrorMessage(errorString);
+
         }
         return throwError(error);
       }));
