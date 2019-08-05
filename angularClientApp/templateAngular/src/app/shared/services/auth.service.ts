@@ -69,6 +69,7 @@ export class AuthService extends BaseComponent {
 
   Logout() {
     localStorage.removeItem('token');
+    // this._router.navigate(['/home']).finally(() => location.reload());
     this._router.navigate(['/login']);
   }
 

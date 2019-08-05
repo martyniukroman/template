@@ -14,13 +14,14 @@ using Microsoft.EntityFrameworkCore;
 namespace hsl.api.Controllers
 {
     [Authorize(Policy = "ApiUser")]
+//    [Authorize(Roles = "admin")]
     [Route("api/[controller]/[action]")]
-    public class DashboardController : Controller
+    public class ProfileController : Controller
     {
         private readonly ClaimsPrincipal _caller;
         private readonly hslapiContext _appDbContext;
 
-        public DashboardController(
+        public ProfileController(
             hslapiContext appDbContext,
             IHttpContextAccessor httpContextAccessor)
         {
@@ -28,9 +29,9 @@ namespace hsl.api.Controllers
             _appDbContext = appDbContext;
         }
 
-        // GET api/dashboard/home
+        // GET api/profile/get
         [HttpGet]
-        public async Task<IActionResult> Home()
+        public async Task<IActionResult> Get()
         {
             // old but gold
             var userId = _caller.Claims.Single(c => c.Type == "id");
@@ -46,6 +47,8 @@ namespace hsl.api.Controllers
 //                           location = c.Location,
 //                      });
 
+
+            // fresh and flesh
             var user = _appDbContext.Users.Join(_appDbContext.Customers,
                 x => x.Id,
                 y => y.IdentityId,

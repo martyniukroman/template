@@ -1,18 +1,18 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {DashboardComponent} from './dashboard/dashboard.component';
 import {RouterModule} from "@angular/router";
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {ProfileComponent} from './profile/profile.component';
 
 @NgModule({
   declarations: [
-    DashboardComponent,
+    ProfileComponent,
   ],
   imports: [
     CommonModule,
     FlexLayoutModule,
     RouterModule.forChild([
-      {path: 'dashboard', component: DashboardComponent}
+      {path: 'profile', component: ProfileComponent}
     ]),
   ],
   exports: [],

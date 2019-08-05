@@ -1,7 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="center center">
   <div class="fatherDiv" fxLayout="row" fxLayoutAlign="start center">
     <dx-button icon="home" [routerLink]="'/home'" stylingMode="text"></dx-button>
-    <dx-button stylingMode="text" [routerLink]="'/other/dashboard'" text="Dashboard"></dx-button>
+    <dx-button icon="user" stylingMode="text" [routerLink]="'/other/profile'" ></dx-button>
   </div>
   <div class="fatherDiv" fxLayout="row" fxLayoutAlign="end center">
     <dx-button *ngIf="isLogined" (onClick)="SignOut()" stylingMode="text" text="Sign Out"></dx-button>
