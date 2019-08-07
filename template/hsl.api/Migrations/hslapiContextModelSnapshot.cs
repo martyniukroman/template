@@ -59,32 +59,27 @@ namespace hsl.api.Migrations
                     b.ToTable("Goods");
                 });
 
-            modelBuilder.Entity("hsl.api.Models.RefreshToken", b =>
+            modelBuilder.Entity("hsl.api.Models.TokenModel", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(450);
 
+                    b.Property<string>("ClientId");
+
+                    b.Property<DateTime>("CratedUtc");
+
                     b.Property<DateTime>("ExpiresUtc");
 
-                    b.Property<DateTime>("IssuedUtc");
+                    b.Property<DateTime>("LastModifiedUtc");
 
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(450);
+                    b.Property<string>("Token");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(450);
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("Token")
-                        .HasName("refreshToken_Token");
-
-
-                    b.HasAlternateKey("UserId")
-                        .HasName("refreshToken_UserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("AspNetRefreshTokens");
                 });
@@ -108,7 +103,13 @@ namespace hsl.api.Migrations
 
                     b.Property<string>("FirstName");
 
+                    b.Property<string>("Gender");
+
                     b.Property<string>("LastName");
+
+                    b.Property<string>("Locale");
+
+                    b.Property<string>("Location");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -269,12 +270,11 @@ namespace hsl.api.Migrations
                         .HasForeignKey("IdentityUserId");
                 });
 
-            modelBuilder.Entity("hsl.api.Models.RefreshToken", b =>
+            modelBuilder.Entity("hsl.api.Models.TokenModel", b =>
                 {
                     b.HasOne("hsl.api.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany("Tokens")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

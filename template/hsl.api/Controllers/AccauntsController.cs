@@ -19,7 +19,6 @@ namespace hsl.api.Controllers
     {
 
         private readonly UserManager<User> _userManager;
-   //     private readonly IRegistrationInterface _registrationService;
         private readonly IMapper _mapper;
         private readonly hslapiContext _context;
 
