@@ -70,43 +70,57 @@ namespace hsl.api
             services.AddSingleton(mapper);
 
             //setup jwtToken
-            var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
-            services.Configure<JwtIssuerOptions>(op =>
+            services.AddAuthentication(options =>
             {
-                op.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
-                op.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
-                op.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
-            });
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = _.JwtIssuer,
+                        ClockSkew = TimeSpan.Zero,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.JwtKey))
+                    };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                                (path.StartsWithSegments("/notifications")))
+                            {
+                                context.Token = accessToken;
+                            }
 
-                ValidateAudience = false,
-                ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
 
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = _signingKey,
+            //Add Authorization policy
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApprovedPatients",
+                    policyBuilder => policyBuilder.RequireAssertion(
+                        context => context.User.HasClaim(claim =>
+                                       claim.Type == "ApprovedPatient")
+                                   && context.User.IsInRole("Patient")));
 
-                RequireExpirationTime = false,
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            };
-            services.AddAuthentication(op =>
-            {
-                op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                op.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(configureOptions =>
-            {
-                configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
-                configureOptions.TokenValidationParameters = tokenValidationParameters;
-                configureOptions.SaveToken = true;
+                options.AddPolicy("ApprovedDoctors",
+                    policyBuilder => policyBuilder.RequireAssertion(
+                        context => context.User.HasClaim(claim =>
+                                       claim.Type == "ApprovedDoctor")
+                                   && context.User.IsInRole("Doctor")));
             });
-            services.AddAuthorization(op =>
-            {
-                op.AddPolicy("ApiUser", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol,
-                    Constants.Strings.JwtClaims.ApiAccess));
-            });
+
 
             // setup entity
             services.AddEntityFrameworkSqlServer().AddDbContext<hslapiContext>(options =>
