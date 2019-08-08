@@ -82,7 +82,7 @@ namespace hsl.api
                 ValidateIssuer = true,
                 ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
 
-                ValidateAudience = true,
+                ValidateAudience = false,
                 ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
 
                 ValidateIssuerSigningKey = true,
@@ -133,6 +133,7 @@ namespace hsl.api
 
             // Initialization dependency injection
             services.AddScoped<IRegistrationInterface, RegistrationService>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddSingleton<IJwtFactory, JwtFactory>();
         }
 

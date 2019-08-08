@@ -17,19 +17,10 @@ namespace hsl.api.Models
 
         public DbSet<Customer> Customers { set; get; }
         public DbSet<Good> Goods { set; get; }
-//        public DbSet<TokenModel> Tokens { set; get; }
+        public DbSet<RefreshTokenModel> Tokens { set; get; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
-//            builder.Entity<TokenModel>()
-//                .HasAlternateKey(c => c.UserId)
-//                .HasName("refreshToken_UserId");
-//
-//            builder.Entity<TokenModel>()
-//                .HasAlternateKey(c => c.Token)
-//                .HasName("refreshToken_Token");
-
             base.OnModelCreating(builder);
         }
     }

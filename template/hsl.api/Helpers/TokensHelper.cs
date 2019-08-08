@@ -25,4 +25,5 @@ namespace hsl.api.Helpers
             return JsonConvert.SerializeObject(response, jsonSerializerSettings);
         }
     }
+
 }

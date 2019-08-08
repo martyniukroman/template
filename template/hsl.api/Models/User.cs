@@ -13,6 +13,6 @@ namespace hsl.api.Models
         public string Location { get; set; }
         public string Locale { get; set; }
         public string Gender { get; set; }
-        public IList<TokenModel> Tokens { get; set; }
+        public IList<RefreshTokenModel> Tokens { get; set; }
     }
 }
