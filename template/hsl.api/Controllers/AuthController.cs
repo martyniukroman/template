@@ -39,16 +39,16 @@ namespace hsl.api.Controllers
             var identity = await GetClaimsIdentity(creds.UserName, creds.Password);
             if (identity == null)
             {
+
                 return BadRequest(new {message = "Invalid credentials"});
                 // return BadRequest(Errors.AddErrorToModelState("login_failure", "Invalid username or password.", ModelState));
             }
 
-            var jwt = await TokensHelper.GenerateJwt(identity, _jwtFactory, creds.UserName, _jwtOptions,
+            var jwt = await TokensHelper.GenerateJwtAsync(identity, _jwtFactory, creds.UserName, _jwtOptions,
                 new JsonSerializerSettings {Formatting = Formatting.Indented});
 
             return new OkObjectResult(jwt);
         }
-
         private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
         {
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))

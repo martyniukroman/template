@@ -9,7 +9,7 @@ namespace hsl.api.Helpers
 {
     public static class TokensHelper
     {
-        public static async Task<string> GenerateJwt(
+        public static async Task<string> GenerateJwtAsync(
             ClaimsIdentity identity,
             IJwtFactory jwtFactory,
             string userName,
