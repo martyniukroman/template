@@ -24,6 +24,11 @@ namespace hsl.api.Models
         public string Audience { get; set; }
 
         /// <summary>
+        /// 4.1.1.3.  The app secret
+        /// </summary>
+        public string Secret { get; set; }
+
+        /// <summary>
         /// 4.1.4.  "exp" (Expiration Time) Claim - The "exp" (expiration time) claim identifies the expiration time on or after which the JWT MUST NOT be accepted for processing.
         /// </summary>
         public DateTime Expiration => IssuedAt.Add(ValidFor);
