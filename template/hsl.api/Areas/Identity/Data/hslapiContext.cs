@@ -17,7 +17,7 @@ namespace hsl.api.Models
 
         public DbSet<Customer> Customers { set; get; }
         public DbSet<Good> Goods { set; get; }
-        public DbSet<TokenModel> Tokens { set; get; }
+//        public DbSet<TokenModel> Tokens { set; get; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
