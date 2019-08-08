@@ -28,7 +28,7 @@ namespace hsl.api
 {
     public class Startup
     {
-        private const string SecretKey = "HelloWorldThisIsSecret"; // todo: get this from somewhere secure
+        private const string SecretKey = "bed77aaafefas5c57fc865fasf6c0a1e2533760"; // todo: get this from somewhere secure
 
         private readonly SymmetricSecurityKey
             _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));

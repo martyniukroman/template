@@ -22,6 +22,7 @@ namespace hsl.api.Services
         private const string DOCTOR = "Doctor";
         private const int MAXIMUM_LOGGED_DEVICES = 5;
         private const int REFRESH_TOKEN_LIFETIME_DAYS = 15;
+        private const string SecretKey = "bed77aaafefas5c57fc865fasf6c0a1e2533760";
 
         public TokenService(hslapiContext context, IOptions<JwtIssuerOptions> settings, UserManager<User> userManager)
         {
@@ -37,24 +38,24 @@ namespace hsl.api.Services
         /// <returns>access token</returns>
         public async Task<JwtSecurityToken> GenerateAccessToken(User user)
         {
-            var claims = new[]
+            var claims = new List<Claim>
             {
+                new Claim(ClaimTypes.Name, user.Id),
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, await _appSettings.JtiGenerator()),
                 new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_appSettings.IssuedAt).ToString(),
                     ClaimValueTypes.Integer64),
             };
-
-            var jwt = new JwtSecurityToken(
+            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("bed77aaafefas5c57fc865fasf6c0a1e2533760"));
+            var credential = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var currentTime = DateTime.UtcNow;
+            var token = new JwtSecurityToken(
                 issuer: _appSettings.Issuer,
-                audience: _appSettings.Audience,
+                notBefore: currentTime,
                 claims: claims,
-                notBefore: _appSettings.NotBefore,
-                expires: _appSettings.Expiration,
-                signingCredentials: _appSettings.SigningCredentials
-            );
-
-            return jwt;
+                expires: currentTime.AddDays(1),
+                signingCredentials: credential);
+            return token;
         }
 
         /// <summary>

@@ -6,7 +6,7 @@ export abstract class BaseComponent implements OnInit {
   protected readonly isLogined: boolean = false;
 
   protected constructor() {
-    let token = localStorage.getItem('token');
+    let token = localStorage.getItem('access_token');
     this.isLogined = !!token;
   }
 

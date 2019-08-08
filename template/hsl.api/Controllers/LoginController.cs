@@ -10,6 +10,11 @@ using Microsoft.Extensions.Options;
 
 namespace hsl.api.Controllers
 {
+    public class RToken
+    {
+        public string RefreshToken { get; set; }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
@@ -47,9 +52,9 @@ namespace hsl.api.Controllers
         }
 
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh([FromBody] string refreshToken)
+        public async Task<IActionResult> Refresh([FromBody] RToken refreshToken)
         {
-            var refreshedToken = _tokenService.RefreshTokenValidation(refreshToken);
+            var refreshedToken = _tokenService.RefreshTokenValidation(refreshToken.RefreshToken);
             if (refreshedToken == null)
             {
                 return BadRequest(new {message = "invalid_grant"});
@@ -76,5 +81,8 @@ namespace hsl.api.Controllers
 
             return await Task.FromResult<ClaimsIdentity>(null);
         }
+
+
+
     }
 }
