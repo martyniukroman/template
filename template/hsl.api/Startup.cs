@@ -31,7 +31,7 @@ namespace hsl.api
         private const string SecretKey = "bed77aaafefas5c57fc865fasf6c0a1e2533760"; // todo: get this from somewhere secure
 
         private readonly SymmetricSecurityKey
-            _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
+            _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey)); //ascii
 
         public Startup(IConfiguration configuration)
         {
@@ -86,7 +86,7 @@ namespace hsl.api
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = _.JwtIssuer,
                         ClockSkew = TimeSpan.Zero,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.JwtKey))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.JwtKey)) // UTF8
                     };
                     options.Events = new JwtBearerEvents
                     {
