@@ -8,6 +8,8 @@ namespace hsl.api.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string DisplayName { get; set; }
+        public int Type { get; set; }
         public long? FacebookId { get; set; }
         public string PictureUrl { get; set; }
         public string Location { get; set; }

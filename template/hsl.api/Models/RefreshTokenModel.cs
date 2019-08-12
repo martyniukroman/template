@@ -9,8 +9,8 @@ namespace hsl.api.Models
     {
         public string Id { get; set; }
         public string Token { get; set; }
+        public DateTime CreatedUtc { get; set; }
         public DateTime ExpiresUtc { get; set; }
-        public bool Revoked { get; set; }
         public string UserId { get; set; }
 
         public virtual User User { get; set; }
