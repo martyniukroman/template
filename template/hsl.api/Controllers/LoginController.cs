@@ -33,7 +33,7 @@ namespace hsl.api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignIn([FromBody] CredentialsViewModel creds)
+        public async Task<IActionResult> Post([FromBody] CredentialsViewModel creds)
         {
             var identity = await GetClaimsIdentity(creds.UserName, creds.Password);
             if (identity == null)

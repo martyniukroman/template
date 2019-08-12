@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hsl.api.Controllers
 {
-    [Authorize(Policy = "ApiUser")]
+    [Authorize(Policy = "AppUser")]
 //    [Authorize(Roles = "admin")]
     [Route("api/[controller]/[action]")]
     public class ProfileController : Controller

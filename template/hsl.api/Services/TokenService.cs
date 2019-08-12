@@ -46,7 +46,7 @@ namespace hsl.api.Services
                 new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_appSettings.IssuedAt).ToString(),
                     ClaimValueTypes.Integer64),
             };
-            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("bed77aaafefas5c57fc865fasf6c0a1e2533760"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppConfig.JwtSecret()));
             var credential = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var currentTime = DateTime.UtcNow;
             var token = new JwtSecurityToken(

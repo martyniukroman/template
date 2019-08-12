@@ -33,15 +33,13 @@ namespace hsl.api.Controllers
         }
 
         // POST api/auth/login
-        [HttpPost("login")]
+        [HttpPost("auth")]
         public async Task<IActionResult> Post([FromBody] CredentialsViewModel creds)
         {
             var identity = await GetClaimsIdentity(creds.UserName, creds.Password);
             if (identity == null)
             {
-
                 return BadRequest(new {message = "Invalid credentials"});
-                // return BadRequest(Errors.AddErrorToModelState("login_failure", "Invalid username or password.", ModelState));
             }
 
             var jwt = await TokensHelper.GenerateJwtAsync(identity, _jwtFactory, creds.UserName, _jwtOptions,

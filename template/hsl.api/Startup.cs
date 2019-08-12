@@ -28,10 +28,8 @@ namespace hsl.api
 {
     public class Startup
     {
-        private const string SecretKey = "bed77aaafefas5c57fc865fasf6c0a1e2533760"; // todo: get this from somewhere secure
-
         private readonly SymmetricSecurityKey
-            _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
+            _signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppConfig.JwtSecret()));
 
         public Startup(IConfiguration configuration)
         {
@@ -70,57 +68,43 @@ namespace hsl.api
             services.AddSingleton(mapper);
 
             //setup jwtToken
-            services.AddAuthentication(options =>
+            var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
+            services.Configure<JwtIssuerOptions>(op =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = _.JwtIssuer,
-                        ClockSkew = TimeSpan.Zero,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.JwtKey))
-                    };
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnMessageReceived = context =>
-                        {
-                            var accessToken = context.Request.Query["access_token"];
-                            var path = context.HttpContext.Request.Path;
-                            if (!string.IsNullOrEmpty(accessToken) &&
-                                (path.StartsWithSegments("/notifications")))
-                            {
-                                context.Token = accessToken;
-                            }
-
-                            return Task.CompletedTask;
-                        }
-                    };
-                });
-
-            //Add Authorization policy
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("ApprovedPatients",
-                    policyBuilder => policyBuilder.RequireAssertion(
-                        context => context.User.HasClaim(claim =>
-                                       claim.Type == "ApprovedPatient")
-                                   && context.User.IsInRole("Patient")));
-
-                options.AddPolicy("ApprovedDoctors",
-                    policyBuilder => policyBuilder.RequireAssertion(
-                        context => context.User.HasClaim(claim =>
-                                       claim.Type == "ApprovedDoctor")
-                                   && context.User.IsInRole("Doctor")));
+                op.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
+                op.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
+                op.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
             });
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
 
+                ValidateAudience = true,
+                ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
+
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = _signingKey,
+
+                RequireExpirationTime = false,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+            services.AddAuthentication(op =>
+            {
+                op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                op.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(configureOptions =>
+            {
+                configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
+                configureOptions.TokenValidationParameters = tokenValidationParameters;
+                configureOptions.SaveToken = true;
+            });
+            services.AddAuthorization(op =>
+            {
+                op.AddPolicy("AppUser", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol,
+                    Constants.Strings.JwtClaims.ApiAccess));
+            });
 
             // setup entity
             services.AddEntityFrameworkSqlServer().AddDbContext<hslapiContext>(options =>
@@ -147,8 +131,8 @@ namespace hsl.api
 
             // Initialization dependency injection
             services.AddScoped<IRegistrationInterface, RegistrationService>();
-            services.AddScoped<ITokenService, TokenService>();
             services.AddSingleton<IJwtFactory, JwtFactory>();
+            services.AddScoped<ITokenService, TokenService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

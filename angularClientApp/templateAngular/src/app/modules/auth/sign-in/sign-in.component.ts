@@ -32,15 +32,19 @@ export class SignInComponent extends BaseComponent {
         password: this.password
       }).subscribe(data => {
 
-      response = data;
+      response = JSON.parse(data);
+      console.log(response);
 
       if (response.access_token) {
         localStorage.setItem('access_token', response.access_token);
       }
-      if (response.refresh_token) {
-        localStorage.setItem('refresh_token', response.refresh_token);
-      }
-      if (response.access_token && response.refresh_token) {
+      // if (response.refresh_token) {
+      //   localStorage.setItem('refresh_token', response.refresh_token);
+      // }
+      // if (response.access_token && response.refresh_token) {
+      //   this._router.navigate(['/home']).finally(() => location.reload());
+      // }
+      if (response.access_token) {
         this._router.navigate(['/home']).finally(() => location.reload());
       }
     });

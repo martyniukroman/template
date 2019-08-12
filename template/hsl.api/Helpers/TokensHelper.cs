@@ -19,7 +19,7 @@ namespace hsl.api.Helpers
             var response = new
             {
                 id = identity.Claims.Single(c => c.Type == "id").Value,
-                auth_token = await jwtFactory.GenerateEncodedToken(userName, identity),
+                access_token = await jwtFactory.GenerateEncodedToken(userName, identity),
                 expires_in = (int) jwtIssuerOptions.ValidFor.TotalSeconds
             };
             return JsonConvert.SerializeObject(response, jsonSerializerSettings);

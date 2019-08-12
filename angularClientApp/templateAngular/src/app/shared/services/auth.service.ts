@@ -18,7 +18,7 @@ export class AuthService extends BaseComponent {
   }
 
   public Login(data: any) {
-    return this._httpClient.post<any>(appConfig.BaseApiUri + 'login', data);
+    return this._httpClient.post<any>(appConfig.BaseApiUri + 'auth/auth', data);
   }
 
   public Register(data: any) {
