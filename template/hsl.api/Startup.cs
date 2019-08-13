@@ -29,7 +29,7 @@ namespace hsl.api
     public class Startup
     {
         private readonly SymmetricSecurityKey
-            _signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppConfig.JwtSecret()));
+            _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AppConfig.JwtSecret()));
 
         public Startup(IConfiguration configuration)
         {
@@ -69,36 +69,41 @@ namespace hsl.api
 
             //setup jwtToken
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
-            services.Configure<JwtIssuerOptions>(op =>
-            {
-                op.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
-                op.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
-                op.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
-            });
+//            services.Configure<JwtIssuerOptions>(op =>
+//            {
+//                op.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
+//                op.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
+//                op.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
+//            });
             var tokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = true,
-                ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
-
-                ValidateAudience = true,
-                ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
-
                 ValidateIssuerSigningKey = true,
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                
+                
+                ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
+                ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
                 IssuerSigningKey = _signingKey,
+                
+                
 
-                RequireExpirationTime = false,
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
+
+
+//                RequireExpirationTime = false,
+//                ValidateLifetime = true,
+//                ClockSkew = TimeSpan.Zero
             };
             services.AddAuthentication(op =>
             {
                 op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 op.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                op.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(configureOptions =>
             {
-                configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
+//                configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
                 configureOptions.TokenValidationParameters = tokenValidationParameters;
-                configureOptions.SaveToken = true;
+//                configureOptions.SaveToken = true;
             });
             services.AddAuthorization(op =>
             {

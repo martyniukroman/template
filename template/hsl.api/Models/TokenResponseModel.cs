@@ -8,6 +8,6 @@ namespace hsl.api.Models
         public DateTime expires { get; set; }
         public string refresh_token { get; set; }
         public string roles { get; set; }
-        public string password { get; set; }
+        public string username { get; set; }
     }
 }
