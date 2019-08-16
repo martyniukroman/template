@@ -18,8 +18,7 @@ namespace hsl.api.Controllers
     {
         public string RefreshToken { get; set; }
     }
-
-
+    
     [Route("api/[controller]")]
     [ApiController]
     public class TokenController : ControllerBase
@@ -41,7 +40,7 @@ namespace hsl.api.Controllers
             _jwtIssuerOptions = options.Value;
         }
 
-        [HttpPost("action")]
+        [HttpPost("login")]
         public async Task<IActionResult> Post([FromBody] TokenRequestModel model)
         {
             if (model == null)
@@ -88,7 +87,6 @@ namespace hsl.api.Controllers
                 return new BadRequestObjectResult(new {message = e.Message, innerMessage = e.InnerException?.Message});
             }
 
-            return new BadRequestResult();
         }
 
         private async Task<IActionResult> GenerateNewToken(TokenRequestModel model)

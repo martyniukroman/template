@@ -69,30 +69,15 @@ namespace hsl.api
 
             //setup jwtToken
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
-//            services.Configure<JwtIssuerOptions>(op =>
-//            {
-//                op.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
-//                op.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
-//                op.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
-//            });
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 
-                
                 ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
                 ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
                 IssuerSigningKey = _signingKey,
-                
-                
-
-
-
-//                RequireExpirationTime = false,
-//                ValidateLifetime = true,
-//                ClockSkew = TimeSpan.Zero
             };
             services.AddAuthentication(op =>
             {
@@ -101,9 +86,7 @@ namespace hsl.api
                 op.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(configureOptions =>
             {
-//                configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
                 configureOptions.TokenValidationParameters = tokenValidationParameters;
-//                configureOptions.SaveToken = true;
             });
             services.AddAuthorization(op =>
             {
@@ -138,6 +121,7 @@ namespace hsl.api
             services.AddScoped<IRegistrationInterface, RegistrationService>();
             services.AddSingleton<IJwtFactory, JwtFactory>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<RefreshTokenModel>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
