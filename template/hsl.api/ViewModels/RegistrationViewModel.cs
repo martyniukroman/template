@@ -6,8 +6,9 @@ namespace hsl.api.Models
     {
         [Required] [EmailAddress] public string Email { set; get; }
         [Required] public string UserName { set; get; }
+        [Required] public string DisplayName { set; get; }
         [Required] [DataType(DataType.Password)] public string Password { set; get; }
-        [Required] public string Location { set; get; }
-        [Required] public string Gender { set; get; }
+        public string Location { set; get; }
+        public string Gender { set; get; }
     }
 }

@@ -15,16 +15,16 @@ export class DataServiceProvider extends BaseComponent {
   }
 
   public async getDataPromise(path: string) : Promise<any> {
-    return this.http.get<any>(appConfig.BaseApiUri + path).toPromise();
+    return this.http.get<any>(appConfig.BaseApiUrl + path).toPromise();
   }
 
   public getDataObservable(path: string) : Observable<any> {
-    return this.http.get<any>(appConfig.BaseApiUri + path);
+    return this.http.get<any>(appConfig.BaseApiUrl + path);
   }
 
   public async postData(path: string, body: any = null) {
 
-    let promise = this.http.get<any>(appConfig.BaseApiUri + path, body).toPromise();
+    let promise = this.http.get<any>(appConfig.BaseApiUrl + path, body).toPromise();
     promise.catch( error => {
       console.log('DataServiceProvider: ', error);
     });
@@ -38,7 +38,7 @@ export class DataServiceProvider extends BaseComponent {
 
   public async putData(path: string, body: any = null) {
 
-    let promise = this.http.put<any>(appConfig.BaseApiUri + path, body).toPromise();
+    let promise = this.http.put<any>(appConfig.BaseApiUrl + path, body).toPromise();
     promise.catch( error => {
       console.log('DataServiceProvider: ', error);
     });
@@ -52,7 +52,7 @@ export class DataServiceProvider extends BaseComponent {
 
   public async deleteData(path: string, body: any = null) {
 
-    let promise = this.http.delete<any>(appConfig.BaseApiUri + path, body).toPromise();
+    let promise = this.http.delete<any>(appConfig.BaseApiUrl + path, body).toPromise();
     promise.catch( error => {
       console.log('DataServiceProvider: ', error);
     });

@@ -32,8 +32,8 @@ namespace hsl.api.Controllers
             var user = new User()
             {
                 Email = formData.Email,
-                UserName = formData.Email,
-                DisplayName = formData.UserName,
+                UserName = formData.UserName,
+                DisplayName = formData.DisplayName,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 Gender = formData.Gender,
                 Location = formData.Location,
@@ -52,7 +52,6 @@ namespace hsl.api.Controllers
                         status = 1,
                     }
                 );
-                
             }
             else
             {

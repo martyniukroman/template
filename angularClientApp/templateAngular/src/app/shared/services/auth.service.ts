@@ -18,7 +18,7 @@ export class AuthService extends BaseComponent {
   }
 
   public Login(data: any) {
-    return this._httpClient.post<any>(appConfig.BaseApiUri + 'token/login', {
+    return this._httpClient.post<any>(appConfig.BaseApiUrl + 'token/login', {
       UserName: data.userName,
       Password: data.password,
       GrantType: "password",
@@ -26,7 +26,15 @@ export class AuthService extends BaseComponent {
   }
 
   public Register(data: any) {
-    return this._httpClient.post<any>(appConfig.BaseApiUri + 'accaunts', data);
+    return this._httpClient.post<any>(appConfig.BaseApiUrl + 'accaunt/register', data);
+
+    // "Email": "user4@bk.ru",
+    // "Password": "123456",
+    // "DisplayName": "martin",
+    // "UserName": "martinName",
+    // "Location": "Ukraine",
+    // "Gender": "male",
+
   }
 
   Logout() {
@@ -36,6 +44,7 @@ export class AuthService extends BaseComponent {
   }
 
 }
+
 // public string GrantType { get; set; }
 // public string ClientId { get; set; }
 // public string UserName { get; set; }
