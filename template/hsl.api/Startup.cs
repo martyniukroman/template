@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using hsl.api.Helpers;
+﻿using System;
 using hsl.api.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -10,27 +9,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
-using hsl.api.Interfaces;
-using hsl.api.Services;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.IdentityModel.Protocols;
 
 
 namespace hsl.api
 {
     public class Startup
     {
-        private readonly SymmetricSecurityKey
-            _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AppConfig.JwtSecret()));
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -50,10 +40,12 @@ namespace hsl.api
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                    x => x.AllowAnyOrigin()
+                    x => x
+                        .AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials()
+                        .Build()
                 );
             });
 
@@ -63,21 +55,22 @@ namespace hsl.api
             });
 
             // setup mapper
-            var mappingConfig = new MapperConfiguration(mConfig => { mConfig.AddProfile(new MappingProfile()); });
-            IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);
 
             //setup jwtToken
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
+            services.Configure<JwtIssuerOptions>(jwtAppSettingOptions);
+            var jwtSettings = jwtAppSettingOptions.Get<JwtIssuerOptions>();
+            var secretKey = Encoding.ASCII.GetBytes(jwtSettings.Secret);
+            
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 ValidateIssuer = true,
-                ValidateAudience = true,
-                
-                ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
-                ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
-                IssuerSigningKey = _signingKey,
+                ValidateAudience = false, // should be validated on production
+
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(secretKey),
             };
             services.AddAuthentication(op =>
             {
@@ -88,10 +81,12 @@ namespace hsl.api
             {
                 configureOptions.TokenValidationParameters = tokenValidationParameters;
             });
-            services.AddAuthorization(op =>
+            services.AddAuthorization(options =>
             {
-                op.AddPolicy("AppUser", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol,
-                    Constants.Strings.JwtClaims.ApiAccess));
+                options.AddPolicy("RequireLoggedIn",
+                    policy => policy.RequireRole("Admin", "Customer", "Moderator").RequireAuthenticatedUser());
+                options.AddPolicy("RequireAdministratorRole",
+                    policy => policy.RequireRole("Admin").RequireAuthenticatedUser());
             });
 
             // setup entity
@@ -100,27 +95,28 @@ namespace hsl.api
                     b => b.MigrationsAssembly("hsl.api")));
 
             //setupIdentity
-            var builder = services.AddIdentityCore<User>(o =>
-                {
-                    // configure identity options
-                    o.Password.RequireDigit = false;
-                    o.Password.RequireLowercase = false;
-                    o.Password.RequireUppercase = false;
-                    o.Password.RequireNonAlphanumeric = false;
-                    o.Password.RequiredLength = 6;
-                    o.User.RequireUniqueEmail = true;
-                }).AddEntityFrameworkStores<hslapiContext>()
-                .AddDefaultTokenProviders();
+            var identityBuilder = services.AddIdentityCore<User>(o =>
+                                          {
+                                              // configure identity options
+                                              o.Password.RequireDigit = false;
+                                              o.Password.RequireLowercase = false;
+                                              o.Password.RequireUppercase = false;
+                                              o.Password.RequireNonAlphanumeric = false;
+                                              o.Password.RequiredLength = 6;
+                                              o.User.RequireUniqueEmail = true;
+                                              o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                                              o.Lockout.MaxFailedAccessAttempts = 3;
+                                              o.Lockout.AllowedForNewUsers = true;
+                                          }
+                                      ).AddRoles<IdentityRole>().AddEntityFrameworkStores<hslapiContext>()
+                                      .AddDefaultTokenProviders() ?? throw new ArgumentNullException(nameof(services));
 
-            builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
-            builder.AddEntityFrameworkStores<hslapiContext>().AddDefaultTokenProviders();
-            services.AddAutoMapper();
+            identityBuilder =
+                new IdentityBuilder(identityBuilder.UserType, typeof(IdentityRole), identityBuilder.Services);
+            identityBuilder.AddEntityFrameworkStores<hslapiContext>().AddDefaultTokenProviders();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             // Initialization dependency injection
-            services.AddScoped<IRegistrationInterface, RegistrationService>();
-            services.AddSingleton<IJwtFactory, JwtFactory>();
-            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<RefreshTokenModel>();
         }
 
@@ -149,10 +145,10 @@ namespace hsl.api
                         });
                 });
 
-            app.UseDefaultFiles();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
-            app.UseHttpsRedirection();
+            app.UseDefaultFiles();
             app.UseMvc();
             app.UseCors("CorsPolicy");
         }

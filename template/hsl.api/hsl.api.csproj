@@ -39,4 +39,10 @@
     <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ViewStart.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helpers" />
+    <Folder Include="Interfaces" />
+    <Folder Include="Services" />
+  </ItemGroup>
+
 </Project>

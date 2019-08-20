@@ -4,9 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using hsl.api.Interfaces;
 using hsl.api.Models;
-using hsl.api.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -18,23 +16,22 @@ namespace hsl.api.Controllers
     {
         public string RefreshToken { get; set; }
     }
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class TokenController : ControllerBase
     {
-        private readonly ITokenService _tokenService;
         private readonly RefreshTokenModel _refreshTokenModel;
         private readonly UserManager<User> _userManager;
         private readonly hslapiContext _hslapiContext;
         private readonly JwtIssuerOptions _jwtIssuerOptions;
 
         public TokenController(UserManager<User> userManager,
-            ITokenService tokenService, RefreshTokenModel refreshTokenModel, hslapiContext hslapiContextMir,
+            RefreshTokenModel refreshTokenModel,
+            hslapiContext hslapiContextMir,
             IOptions<JwtIssuerOptions> options)
         {
             _userManager = userManager;
-            _tokenService = tokenService;
             _refreshTokenModel = refreshTokenModel;
             _hslapiContext = hslapiContextMir;
             _jwtIssuerOptions = options.Value;
@@ -64,14 +61,14 @@ namespace hsl.api.Controllers
                     x.ClientId == _jwtIssuerOptions.ClientId && x.Token == model.RefreshToken);
 
                 if (refreshToken == null)
-                    return new BadRequestObjectResult( new {message = "invalid refresh token"});
+                    return new BadRequestObjectResult(new {message = "invalid refresh token"});
                 if (refreshToken.ExpiresUtc < DateTime.UtcNow)
-                    return new BadRequestObjectResult( new {message = "refresh token expired"});
+                    return new BadRequestObjectResult(new {message = "refresh token expired"});
 
                 var user = await _userManager.FindByIdAsync(refreshToken.UserId);
-                
+
                 if (user == null)
-                    return new BadRequestObjectResult( new {message = "user not found"});
+                    return new BadRequestObjectResult(new {message = "user not found"});
 
                 var newRefreshToken = CreateRefreshToken(refreshToken.ClientId, user.Id);
                 _hslapiContext.Tokens.Remove(refreshToken);
@@ -80,13 +77,11 @@ namespace hsl.api.Controllers
 
                 var response = await CreateAccessToken(user, newRefreshToken.Token);
                 return new OkObjectResult(new {access_token = response});
-                
             }
             catch (Exception e)
             {
                 return new BadRequestObjectResult(new {message = e.Message, innerMessage = e.InnerException?.Message});
             }
-
         }
 
         private async Task<IActionResult> GenerateNewToken(TokenRequestModel model)
