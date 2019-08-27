@@ -28,6 +28,8 @@ export class SignInComponent extends BaseComponent {
 
     this._authService.Login(this.email, this.password).subscribe(result => {
 
+      console.log(result);
+
         let token = (<any>result).authToken.token;
         console.log(token);
         console.log(result.authToken.roles);

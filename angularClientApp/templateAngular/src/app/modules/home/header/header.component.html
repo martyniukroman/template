@@ -6,7 +6,7 @@
   </div>
   <div class="fatherDiv" fxLayout="row" fxLayoutAlign="end center">
     <dx-button *ngIf="LoginStatus$" (onClick)="SignOut()" stylingMode="text" text="Sign Out"></dx-button>
-    <dx-button *ngIf="!LoginStatus$" [routerLink]="'/auth/register'" stylingMode="text" text="Register"></dx-button>
-    <dx-button *ngIf="!LoginStatus$" [routerLink]="'/auth/signin'" stylingMode="text" text="Login"></dx-button>
+    <dx-button *ngIf="LoginStatus$" [routerLink]="'/auth/register'" stylingMode="text" text="Register"></dx-button>
+    <dx-button *ngIf="LoginStatus$" [routerLink]="'/auth/signin'" stylingMode="text" text="Login"></dx-button>
   </div>
 </div>

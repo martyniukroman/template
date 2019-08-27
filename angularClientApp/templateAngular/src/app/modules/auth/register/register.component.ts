@@ -23,23 +23,7 @@ export class RegisterComponent extends BaseComponent {
 
   public onFormSubmit(event) {
     event.preventDefault();
-
-    this._authService.Register(this.registerForm).subscribe( response => {
-
-      console.log('response');
-      console.log(response);
-
-      if (response.email && response.status == 1){
-        this.SuccessNotification('Your account successfully created');
-        this._router.navigate(['/auth/signin']);
-      }
-      else{
-        this.ErrorNotification('error');
-      }
-
-    });
-
-
+    this._authService.Register(this.registerForm);
   }
 
   validatePassword(event): boolean{

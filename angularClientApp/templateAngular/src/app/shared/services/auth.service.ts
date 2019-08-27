@@ -33,12 +33,18 @@ export class AuthService extends BaseComponent {
 
   // Register Method
   Register(data) {
-    return this.http.post<any>(appConfig.BaseApiUrl + 'accaunt/register', data).pipe(map(result => {
-      //registration was successful
-      return result;
-    }, error => {
-      return error;
-    }));
+    return this.http.post<any>(appConfig.BaseApiUrl + 'accaunt/register', data).subscribe( x => {
+      console.log(x);
+
+      if (x.email && x.status == 1){
+        this.SuccessNotification('Your account successfully created');
+        this.router.navigateByUrl('/auth/signin');
+      }
+      else{
+        this.ErrorNotification('error');
+      }
+
+    });
   }
 
   // Method to get new refresh token
@@ -47,7 +53,12 @@ export class AuthService extends BaseComponent {
     let refreshToken = localStorage.getItem('refreshToken');
     const grantType = "refresh_token";
 
-    return this.http.post<any>(appConfig.BaseApiUrl + 'token/login', {username, refreshToken, grantType}).pipe(
+    return this.http.post<any>(appConfig.BaseApiUrl + 'token/login',
+      {
+        UserName: username,
+        RefreshToken: refreshToken,
+        GrantType: grantType
+      }).pipe(
       map(result => {
         if (result && result.authToken.token) {
           this.loginStatus.next(true);
@@ -69,17 +80,20 @@ export class AuthService extends BaseComponent {
 
   //Login Method
   Login(username: string, password: string) {
-    const grantType = "password";
+    const grantType = 'password';
     // pipe() let you combine multiple functions into a single function.
     // pipe() runs the composed functions in sequence.
-    return this.http.post<any>(appConfig.BaseApiUrl + 'token/login', {username, password, grantType}).pipe(
+    return this.http.post<any>(appConfig.BaseApiUrl + 'token/login', {
+      UserName: username,
+      Password: password,
+      GrantType: grantType,
+    }).pipe(
       map(result => {
-
+        console.log(result);
         // login successful if there's a jwt token in the response
         if (result && result.authToken.token) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
 
-          this.loginStatus.next(true);
           localStorage.setItem('loginStatus', '1');
           localStorage.setItem('jwt', result.authToken.token);
           localStorage.setItem('username', result.authToken.username);
@@ -88,6 +102,7 @@ export class AuthService extends BaseComponent {
           localStorage.setItem('refreshToken', result.authToken.refresh_token);
           this.UserName.next(localStorage.getItem('username'));
           this.UserRole.next(localStorage.getItem('userRole'));
+          this.loginStatus.next(true);
 
         }
 
@@ -99,14 +114,14 @@ export class AuthService extends BaseComponent {
 
   Logout() {
     // Set Loginstatus to false and delete saved jwt cookie
-    this.loginStatus.next(false);
     localStorage.removeItem('jwt');
     localStorage.removeItem('userRole');
     localStorage.removeItem('username');
     localStorage.removeItem('expiration');
     localStorage.setItem('loginStatus', '0');
-    this.router.navigate(['/login']);
     console.log("Logged Out Successfully");
+    this.router.navigate(['/login']);
+    this.loginStatus.next(false);
   }
 
   checkLoginStatus(): boolean {

@@ -10,9 +10,8 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {catchError, filter, finalize, map, switchMap, take, tap} from 'rxjs/operators';
-import notify from 'devextreme/ui/notify';
-import {BaseComponent} from '../base.component';
 import {AuthService} from './auth.service';
+import {error} from "util";
 
 @Injectable()
 export class TokenInterceptorService implements HttpInterceptor {
@@ -40,8 +39,6 @@ export class TokenInterceptorService implements HttpInterceptor {
             case 400:
               return <any>this._authService.Logout();
           }
-        } else {
-          return throwError(this.handleError);
         }
       })
     );
@@ -52,14 +49,8 @@ export class TokenInterceptorService implements HttpInterceptor {
   private handleError(errorResponse: HttpErrorResponse) {
     let errorMsg: string;
 
-    if (errorResponse.error instanceof Error) {
-      // A client-side or network error occurred. Handle it accordingly.
-      errorMsg = "An error occured : " + errorResponse.error.message;
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      errorMsg = `Backend returned code ${errorResponse.status}, body was: ${errorResponse.error}`;
-    }
+    console.log(errorResponse);
+    console.log('errorResponse');
 
     return throwError(errorMsg);
   }
@@ -68,8 +59,10 @@ export class TokenInterceptorService implements HttpInterceptor {
   // Method to handle http error response
   private handleHttpResponseError(request: HttpRequest<any>, next: HttpHandler) {
 
+    console.log('error');
+
     // First thing to check if the token is in process of refreshing
-    if (!this.isTokenRefreshing)  // If the Token Refresheing is not true
+    if (!this.isTokenRefreshing)  // If the Token Refreshing is not true
     {
       this.isTokenRefreshing = true;
 
@@ -80,6 +73,7 @@ export class TokenInterceptorService implements HttpInterceptor {
       /// call the API to refresh the token
       return this._authService.GetNewRefreshToken().pipe(
         switchMap((tokenresponse: any) => {
+          console.log('newRefresh token');
           if (tokenresponse) {
             this.tokenSubject.next(tokenresponse.authToken.token);
             localStorage.setItem('loginStatus', '1');
