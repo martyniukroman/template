@@ -11,23 +11,23 @@ import {Observable} from "rxjs";
 })
 export class HeaderComponent extends BaseComponent {
 
-  LoginStatus$ : Observable<boolean>;
-  UserName$ : Observable<string>;
+  IsLoggedState: boolean = false;
+  UserName$: Observable<string>;
 
   constructor(private _auth: AuthService, private _router: Router) {
     super();
   }
 
- async ngOnInit() {
+  async ngOnInit() {
 
-   this.LoginStatus$ = this._auth.isLoggesIn;
-   this.UserName$ = this._auth.currentUserName;
+    this._auth.isLoggesIn.subscribe(x => {
+      this.IsLoggedState = x;
+    });
+    this.UserName$ = this._auth.currentUserName;
   }
 
   public SignOut() {
     this._auth.Logout();
-    this._router.navigate(['/auth/signin']).finally(() => {
-      location.reload();
-    });
+    this._router.navigateByUrl('/auth/signin');
   }
 }

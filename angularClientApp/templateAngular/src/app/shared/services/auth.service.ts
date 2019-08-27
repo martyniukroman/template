@@ -18,13 +18,6 @@ export class AuthService extends BaseComponent {
     super();
   }
 
-  // Url to access our Web API’s
-  // private baseUrlLogin: string = "/api/account/login";
-  // private baseUrlRegister: string = "/api/account/register";
-  // // Token Controller
-  // private baseUrlToken: string = "/api/token/auth";
-
-
   // User related properties
   private loginStatus = new BehaviorSubject<boolean>(this.checkLoginStatus());
   private UserName = new BehaviorSubject<string>(localStorage.getItem('username'));
@@ -87,29 +80,24 @@ export class AuthService extends BaseComponent {
       UserName: username,
       Password: password,
       GrantType: grantType,
-    }).pipe(
-      map(result => {
-        console.log(result);
-        // login successful if there's a jwt token in the response
-        if (result && result.authToken.token) {
-          // store user details and jwt token in local storage to keep user logged in between page refreshes
+    }).subscribe( x => {
+      console.log('auth');
+      console.log(x);
+      if (x && x.authToken.token) {
+        // store user details and jwt token in local storage to keep user logged in between page refreshes
+        localStorage.setItem('loginStatus', '1');
+        localStorage.setItem('jwt', x.authToken.token);
+        localStorage.setItem('username', x.authToken.username);
+        localStorage.setItem('expiration', x.authToken.expiration);
+        localStorage.setItem('userRole', x.authToken.roles);
+        localStorage.setItem('refreshToken', x.authToken.refresh_token);
+        this.UserName.next(localStorage.getItem('username'));
+        this.UserRole.next(localStorage.getItem('userRole'));
+        this.loginStatus.next(true);
+        this.router.navigateByUrl('/home')
+      }
 
-          localStorage.setItem('loginStatus', '1');
-          localStorage.setItem('jwt', result.authToken.token);
-          localStorage.setItem('username', result.authToken.username);
-          localStorage.setItem('expiration', result.authToken.expiration);
-          localStorage.setItem('userRole', result.authToken.roles);
-          localStorage.setItem('refreshToken', result.authToken.refresh_token);
-          this.UserName.next(localStorage.getItem('username'));
-          this.UserRole.next(localStorage.getItem('userRole'));
-          this.loginStatus.next(true);
-
-        }
-
-        return result;
-
-      })
-    );
+    });
   }
 
   Logout() {

@@ -9,6 +9,7 @@ import {Page404Component} from './modules/home/page404/page404.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {TokenInterceptorService} from './shared/services/token-Interceptor.service';
 import {LoadingBarHttpClientModule} from '@ngx-loading-bar/http-client';
+import {BaseInterceptor} from "./shared/services/base-Interceptor";
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import {LoadingBarHttpClientModule} from '@ngx-loading-bar/http-client';
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptorService,
+      useClass: BaseInterceptor,
       multi: true,
     }
   ],

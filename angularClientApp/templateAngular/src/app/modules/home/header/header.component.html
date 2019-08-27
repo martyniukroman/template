@@ -1,12 +1,11 @@
 <div fxLayout="row" fxLayoutAlign="center center">
   <div class="fatherDiv" fxLayout="row" fxLayoutAlign="start center">
     <dx-button icon="home" [routerLink]="'/home'" stylingMode="text"></dx-button>
-    <dx-button *ngIf="LoginStatus$" icon="user" stylingMode="text" [routerLink]="'/other/profile'" ></dx-button>
-    <p *ngIf="LoginStatus$">{{UserName$}}</p>
+    <dx-button *ngIf="IsLoggedState == true" icon="user" stylingMode="text" [routerLink]="'/other/profile'" text="{{UserName$ | async}}" ></dx-button>
   </div>
   <div class="fatherDiv" fxLayout="row" fxLayoutAlign="end center">
-    <dx-button *ngIf="LoginStatus$" (onClick)="SignOut()" stylingMode="text" text="Sign Out"></dx-button>
-    <dx-button *ngIf="LoginStatus$" [routerLink]="'/auth/register'" stylingMode="text" text="Register"></dx-button>
-    <dx-button *ngIf="LoginStatus$" [routerLink]="'/auth/signin'" stylingMode="text" text="Login"></dx-button>
+    <dx-button *ngIf="IsLoggedState == true" (onClick)="SignOut()" stylingMode="text" text="Sign Out"></dx-button>
+    <dx-button *ngIf="IsLoggedState == false" [routerLink]="'/auth/register'" stylingMode="text" text="Register"></dx-button>
+    <dx-button *ngIf="IsLoggedState == false" [routerLink]="'/auth/signin'" stylingMode="text" text="Login"></dx-button>
   </div>
 </div>
