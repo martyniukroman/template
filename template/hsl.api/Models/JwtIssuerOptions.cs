@@ -13,12 +13,14 @@ namespace hsl.api.Models
         public string Audience { get; set; }
         public string Secret { get; set; }
         public string ClientId { get; set; }
-        public DateTime Expiration => IssuedAt.Add(ValidFor);
-        public DateTime NotBefore => DateTime.UtcNow;
-        public DateTime IssuedAt => DateTime.UtcNow;
+
+        public string NotBefore => "1";
+
         public TimeSpan ValidFor { get; set; } = TimeSpan.FromMinutes(120);
+
         public Func<Task<string>> JtiGenerator =>
             () => Task.FromResult(Guid.NewGuid().ToString());
+
         public SigningCredentials SigningCredentials { get; set; }
     }
 }

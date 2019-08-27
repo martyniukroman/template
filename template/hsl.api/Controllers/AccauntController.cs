@@ -32,11 +32,10 @@ namespace hsl.api.Controllers
             var user = new User()
             {
                 Email = formData.Email,
-                UserName = formData.UserName,
+                UserName = formData.DisplayName, //UserName and Display is now the same
                 DisplayName = formData.DisplayName,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 Gender = formData.Gender,
-                Location = formData.Location,
             };
 
             var result = await _userManager.CreateAsync(user, formData.Password);

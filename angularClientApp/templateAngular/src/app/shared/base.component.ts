@@ -4,13 +4,8 @@ import {Observable, Subject} from "rxjs";
 
 export abstract class BaseComponent implements OnInit {
 
-  public isLogined$: Subject<boolean> = new Subject<boolean>();
-  public currentUserName$: Subject<boolean>;
-  public currentUserRole$: Subject<boolean>;
-
   protected constructor() {
-    let token = localStorage.getItem('access_token');
-    this.isLogined$.next(!!token);
+    // let token = localStorage.getItem('access_token');
   }
 
   ngOnInit(): void {

@@ -58,24 +58,24 @@ namespace hsl.api.Controllers
             try
             {
                 var refreshToken = _hslapiContext.Tokens.FirstOrDefault(x =>
-                    x.ClientId == _jwtIssuerOptions.ClientId && x.Token == model.RefreshToken);
+                    x.ClientId == _jwtIssuerOptions.ClientId && x.Value == model.RefreshToken);
 
                 if (refreshToken == null)
-                    return new BadRequestObjectResult(new {message = "invalid refresh token"});
-                if (refreshToken.ExpiresUtc < DateTime.UtcNow)
-                    return new BadRequestObjectResult(new {message = "refresh token expired"});
+                    return new BadRequestObjectResult("invalid refresh token");
+                if (refreshToken.ExpiryTime < DateTime.UtcNow)
+                    return new BadRequestObjectResult("refresh token expired");
 
                 var user = await _userManager.FindByIdAsync(refreshToken.UserId);
 
                 if (user == null)
-                    return new BadRequestObjectResult(new {message = "user not found"});
+                    return new BadRequestObjectResult("user not found");
 
                 var newRefreshToken = CreateRefreshToken(refreshToken.ClientId, user.Id);
                 _hslapiContext.Tokens.Remove(refreshToken);
                 _hslapiContext.Tokens.Add(newRefreshToken);
                 await _hslapiContext.SaveChangesAsync();
 
-                var response = await CreateAccessToken(user, newRefreshToken.Token);
+                var response = await CreateAccessToken(user, newRefreshToken.Value);
                 return new OkObjectResult(new {access_token = response});
             }
             catch (Exception e)
@@ -86,9 +86,12 @@ namespace hsl.api.Controllers
 
         private async Task<IActionResult> GenerateNewToken(TokenRequestModel model)
         {
-            var user = await _userManager.FindByNameAsync(model.UserName);
+            var user = await _userManager.FindByEmailAsync(model.UserName);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
+                
+                //TODO: email validation isEmailConfirmed
+                
                 var newRefreshToken =
                     CreateRefreshToken(_jwtIssuerOptions.ClientId, user.Id); // client id might be null
                 var oldRefreshTokens = _hslapiContext.Tokens.Where(x => x.UserId == user.Id);
@@ -100,16 +103,16 @@ namespace hsl.api.Controllers
                 _hslapiContext.Tokens.Add(newRefreshToken);
                 await _hslapiContext.SaveChangesAsync();
 
-                var accessToken = await CreateAccessToken(user, newRefreshToken.Token);
-                return new OkObjectResult(new {access_token = accessToken});
+                var accessToken = await CreateAccessToken(user, newRefreshToken.Value);
+                return new OkObjectResult(new {authToken = accessToken});
             }
 
-            return new UnauthorizedResult();
+            return new BadRequestObjectResult("Please Check the Login Credentials - Invalid Username/Password was entered");
         }
 
         private async Task<TokenResponseModel> CreateAccessToken(User user, string rToken)
         {
-            double tokenExpiryTime = Convert.ToDouble(_jwtIssuerOptions.Expiration);
+            double tokenExpiryTime = Convert.ToDouble(_jwtIssuerOptions.NotBefore); // token lifetime
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AppConfig.JwtSecret()));
             var roles = await _userManager.GetRolesAsync(user);
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -133,8 +136,8 @@ namespace hsl.api.Controllers
             var encoded_token = tokenHandler.WriteToken(access_token);
             return new TokenResponseModel()
             {
-                access_token = encoded_token,
-                expires = access_token.ValidTo,
+                token = encoded_token,
+                expiration = access_token.ValidTo,
                 refresh_token = rToken,
                 roles = roles.FirstOrDefault(),
                 username = user.UserName,
@@ -145,11 +148,11 @@ namespace hsl.api.Controllers
         {
             return new RefreshTokenModel()
             {
-                UserId = userId,
                 ClientId = clientId,
-                Token = Guid.NewGuid().ToString("N"),
-                CreatedUtc = DateTime.UtcNow,
-                ExpiresUtc = DateTime.UtcNow.AddMinutes(240), // more time
+                UserId = userId,
+                Value = Guid.NewGuid().ToString("N"),
+                CreatedDate = DateTime.UtcNow,
+                ExpiryTime = DateTime.UtcNow.AddMinutes(10), // more time
             };
         }
     }

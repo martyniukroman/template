@@ -1,8 +1,6 @@
 export class UserRegistrationModel {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  location: string;
-  gender: string;
+  Email: string;
+  Password: string;
+  DisplayName: string;
+  Gender: string;
 }

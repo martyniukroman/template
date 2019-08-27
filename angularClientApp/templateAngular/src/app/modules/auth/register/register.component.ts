@@ -29,7 +29,7 @@ export class RegisterComponent extends BaseComponent {
       console.log('response');
       console.log(response);
 
-      if (response.id){
+      if (response.email && response.status == 1){
         this.SuccessNotification('Your account successfully created');
         this._router.navigate(['/auth/signin']);
       }

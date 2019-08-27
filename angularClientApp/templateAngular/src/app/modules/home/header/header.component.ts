@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {BaseComponent} from '../../../shared/base.component';
 import {AuthService} from '../../../shared/services/auth.service';
 import {Router} from '@angular/router';
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-header',
@@ -10,17 +11,17 @@ import {Router} from '@angular/router';
 })
 export class HeaderComponent extends BaseComponent {
 
-  public name: string = '';
+  LoginStatus$ : Observable<boolean>;
+  UserName$ : Observable<string>;
 
   constructor(private _auth: AuthService, private _router: Router) {
     super();
   }
 
-  ngOnInit() {
-  }
+ async ngOnInit() {
 
-  public btnClick(): void {
-    alert('Hello ' + this.name);
+   this.LoginStatus$ = this._auth.isLoggesIn;
+   this.UserName$ = this._auth.currentUserName;
   }
 
   public SignOut() {

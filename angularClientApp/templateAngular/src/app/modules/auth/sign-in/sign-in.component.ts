@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {BaseComponent} from '../../../shared/base.component';
 import {AuthService} from '../../../shared/services/auth.service';
 import {Router} from '@angular/router';
+import {Local} from "protractor/built/driverProviders";
 
 @Component({
   selector: 'app-sign-in',
@@ -14,6 +15,7 @@ export class SignInComponent extends BaseComponent {
 
   public password: string;
   public email: string;
+  private _invalidLogin: boolean;
 
   constructor(private _authService: AuthService, private _router: Router) {
     super();
@@ -23,31 +25,23 @@ export class SignInComponent extends BaseComponent {
   }
 
   public onFormSubmit(event) {
-    let response;
-    event.preventDefault();
 
-    this._authService.Login(
-      {
-        userName: this.email,
-        password: this.password
-      }).subscribe(data => {
+    this._authService.Login(this.email, this.password).subscribe(result => {
 
-      response = JSON.parse(data);
-      console.log(response);
+        let token = (<any>result).authToken.token;
+        console.log(token);
+        console.log(result.authToken.roles);
+        console.log("User Logged In Successfully");
+        this._invalidLogin = false;
+        this._router.navigateByUrl('/home');
 
-      if (response.access_token) {
-        localStorage.setItem('access_token', response.access_token);
-      }
-      // if (response.refresh_token) {
-      //   localStorage.setItem('refresh_token', response.refresh_token);
-      // }
-      // if (response.access_token && response.refresh_token) {
-      //   this._router.navigate(['/home']).finally(() => location.reload());
-      // }
-      if (response.access_token) {
-        this._router.navigate(['/home']).finally(() => location.reload());
-      }
-    });
+      },
+      error => {
+        this._invalidLogin = true;
+        this.ErrorNotification(error.error.loginError);
+        console.log(error.error.loginError);
+      })
+
 
   }
 

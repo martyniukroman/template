@@ -9,23 +9,9 @@
       <br>
 
       <div class="dx-field">
-        <div class="dx-field-label">First name</div>
+        <div class="dx-field-label">Display name</div>
         <div class="dx-field-value">
-          <dx-text-box [(value)]="registerForm.firstName" placeholder="First name">
-            <dx-validator>
-              <dxi-validation-rule
-                type="required"
-                message="Required">
-              </dxi-validation-rule>
-            </dx-validator>
-          </dx-text-box>
-        </div>
-      </div>
-
-      <div class="dx-field">
-        <div class="dx-field-label">Last name</div>
-        <div class="dx-field-value">
-          <dx-text-box [(value)]="registerForm.lastName" placeholder="Last name">
+          <dx-text-box [(value)]="registerForm.DisplayName" placeholder="Display Name">
             <dx-validator>
               <dxi-validation-rule
                 type="required"
@@ -39,7 +25,7 @@
       <div class="dx-field">
         <div class="dx-field-label">Email</div>
         <div class="dx-field-value">
-          <dx-text-box [(value)]="registerForm.email" placeholder="Email">
+          <dx-text-box [(value)]="registerForm.Email" placeholder="Email">
             <dx-validator>
               <dxi-validation-rule
                 type="required"
@@ -56,20 +42,9 @@
       </div>
 
       <div class="dx-field">
-        <div class="dx-field-label">Location</div>
-        <div class="dx-field-value">
-          <dx-text-box [(value)]="registerForm.location" placeholder="Location">
-            <dx-validator>
-
-            </dx-validator>
-          </dx-text-box>
-        </div>
-      </div>
-
-      <div class="dx-field">
         <div class="dx-field-label">Gender</div>
         <div class="dx-field-value">
-          <dx-text-box [(value)]="registerForm.gender" placeholder="Gender">
+          <dx-text-box [(value)]="registerForm.Gender" placeholder="Gender">
             <dx-validator>
 
             </dx-validator>
@@ -80,7 +55,7 @@
       <div class="dx-field">
         <div class="dx-field-label">Password</div>
         <div class="dx-field-value">
-          <dx-text-box [(value)]="registerForm.password" mode="password" placeholder="Password">
+          <dx-text-box [(value)]="registerForm.Password" mode="password" placeholder="Password">
             <dx-validator>
               <dxi-validation-rule
                 type="required"
