@@ -1,4 +1,11 @@
-import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+  HttpResponse
+} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
@@ -48,21 +55,26 @@ export class BaseInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         let errorString = '';
 
-        if (!error.ok){
+        if (!error.ok) {
 
           console.log('error->');
           console.log(error);
-          errorString += error.status;
-          if (error.error){
+          if (error.error) {
             errorString += ' ' + error.error;
           }
 
-          if (error.status == 401){
-            this.RefreshTokenHandler(req, next);
-            this._authService.Logout();
-            this._router.navigateByUrl('/auth/signin');
+          if (error.status == 401) {
+            console.log('got 401');
+            if (!this.isTokenRefreshing) {
+              this.isTokenRefreshing = true;
+              this.tokenSubject.next(null);
+              console.log('RefreshTokenHandler');
+              return this._authService.GetNewRefreshToken().toPromise();
+            } else {
+              this.isTokenRefreshing = false;
+            }
           }
-          if (error.status == 0){
+          if (error.status == 0) {
             errorString = 'No connection';
           }
 
@@ -71,46 +83,6 @@ export class BaseInterceptor implements HttpInterceptor {
         }
         return throwError(error);
       }));
-
-  }
-
-  private RefreshTokenHandler(request: HttpRequest<any>, next: HttpHandler) {
-
-    // First thing to check if the token is in process of refreshing
-    if (!this.isTokenRefreshing)  // If the Token Refresheing is not true
-    {
-      this.isTokenRefreshing = true;
-
-      // Any existing value is set to null
-      // Reset here so that the following requests wait until the token comes back from the refresh token API call
-      this.tokenSubject.next(null);
-
-      /// call the API to refresh the token
-      return this._authService.GetNewRefreshToken().pipe(
-        switchMap((tokenresponse: any) => {
-          if (tokenresponse) {
-            this.tokenSubject.next(tokenresponse.authToken.token);
-            localStorage.setItem('loginStatus', '1');
-            localStorage.setItem('jwt', tokenresponse.authToken.token);
-            localStorage.setItem('username', tokenresponse.authToken.username);
-            localStorage.setItem('expiration', tokenresponse.authToken.expiration);
-            localStorage.setItem('userRole', tokenresponse.authToken.roles);
-            localStorage.setItem('refreshToken', tokenresponse.authToken.refresh_token);
-            console.log("Token refreshed...");
-          }
-          return <any>this._authService.Logout();
-        }),
-        catchError(err => {
-          this._authService.Logout();
-          return throwError(err);
-        }),
-        finalize(() => {
-          this.isTokenRefreshing = false;
-        })
-      );
-    } else {
-      this.isTokenRefreshing = false;
-    }
 
   }
 

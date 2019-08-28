@@ -26,14 +26,13 @@ export class AuthService extends BaseComponent {
 
   // Register Method
   Register(data) {
-    return this.http.post<any>(appConfig.BaseApiUrl + 'accaunt/register', data).subscribe( x => {
+    return this.http.post<any>(appConfig.BaseApiUrl + 'accaunt/register', data).subscribe(x => {
       console.log(x);
 
-      if (x.email && x.status == 1){
+      if (x.email && x.status == 1) {
         this.SuccessNotification('Your account successfully created');
         this.router.navigateByUrl('/auth/signin');
-      }
-      else{
+      } else {
         this.ErrorNotification('error');
       }
 
@@ -42,31 +41,34 @@ export class AuthService extends BaseComponent {
 
   // Method to get new refresh token
   GetNewRefreshToken(): Observable<any> {
+    console.log('get new rtoken');
     let username = localStorage.getItem('username');
     let refreshToken = localStorage.getItem('refreshToken');
     const grantType = "refresh_token";
 
-    return this.http.post<any>(appConfig.BaseApiUrl + 'token/login',
+    let response = this.http.post<any>(appConfig.BaseApiUrl + 'token/login',
       {
         UserName: username,
         RefreshToken: refreshToken,
         GrantType: grantType
-      }).pipe(
-      map(result => {
-        if (result && result.authToken.token) {
-          this.loginStatus.next(true);
-          localStorage.setItem('loginStatus', '1');
-          localStorage.setItem('jwt', result.authToken.token);
-          localStorage.setItem('username', result.authToken.username);
-          localStorage.setItem('expiration', result.authToken.expiration);
-          localStorage.setItem('userRole', result.authToken.roles);
-          localStorage.setItem('refreshToken', result.authToken.refresh_token);
-        }
+      }).subscribe(result => {
+        console.log('result');
+        console.log(result);
 
-        return <any>result;
+      if (result && result.authToken.token) {
+        this.loginStatus.next(true);
+        localStorage.setItem('loginStatus', '1');
+        localStorage.setItem('jwt', result.authToken.token);
+        localStorage.setItem('username', result.authToken.username);
+        localStorage.setItem('expiration', result.authToken.expiration);
+        localStorage.setItem('userRole', result.authToken.roles);
+        localStorage.setItem('refreshToken', result.authToken.refresh_token);
+      }
 
-      })
-    );
+      return response;
+
+    });
+
 
   }
 
@@ -80,7 +82,7 @@ export class AuthService extends BaseComponent {
       UserName: username,
       Password: password,
       GrantType: grantType,
-    }).subscribe( x => {
+    }).subscribe(x => {
       console.log('auth');
       console.log(x);
       if (x && x.authToken.token) {

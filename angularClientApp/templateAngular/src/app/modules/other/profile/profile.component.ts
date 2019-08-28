@@ -16,8 +16,14 @@ export class ProfileComponent implements OnInit {
 
   async ngOnInit() {
 
-    this.responseData = await this._dataProvider.getDataPromise('profile/get');
-    console.log(this.responseData);
+    let username = localStorage.getItem('username');
+    console.log('username');
+    console.log(username);
+    if (username) {
+      this.responseData = await this._dataProvider.getDataPromise('profile/get', username);
+      console.log(this.responseData);
+    }
+
 
   }
 }

@@ -7,7 +7,6 @@ import {HomeModule} from './modules/home/home.module';
 import {HomePageComponent} from './modules/home/home-page/home-page.component';
 import {Page404Component} from './modules/home/page404/page404.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {TokenInterceptorService} from './shared/services/token-Interceptor.service';
 import {LoadingBarHttpClientModule} from '@ngx-loading-bar/http-client';
 import {BaseInterceptor} from "./shared/services/base-Interceptor";
 

@@ -14,12 +14,12 @@ export class DataServiceProvider extends BaseComponent {
     super();
   }
 
-  public async getDataPromise(path: string) : Promise<any> {
-    return this.http.get<any>(appConfig.BaseApiUrl + path).toPromise();
+  public async getDataPromise(path: string, data: any) : Promise<any> {
+    return this.http.get<any>(appConfig.BaseApiUrl + path, ).toPromise();
   }
 
-  public getDataObservable(path: string) : Observable<any> {
-    return this.http.get<any>(appConfig.BaseApiUrl + path);
+  public getDataObservable(path: string, data: any) : Observable<any> {
+    return this.http.get<any>(appConfig.BaseApiUrl + path, data);
   }
 
   public async postData(path: string, body: any = null) {

@@ -152,7 +152,7 @@ namespace hsl.api.Controllers
                 UserId = userId,
                 Value = Guid.NewGuid().ToString("N"),
                 CreatedDate = DateTime.UtcNow,
-                ExpiryTime = DateTime.UtcNow.AddMinutes(10), // more time
+                ExpiryTime = DateTime.UtcNow.AddMinutes(120), // more time
             };
         }
     }
