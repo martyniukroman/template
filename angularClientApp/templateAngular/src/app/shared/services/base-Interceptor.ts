@@ -100,7 +100,7 @@ export class BaseInterceptor implements HttpInterceptor {
   private RaiseErrorMessage(text: string) {
     notify({
       message: text,
-      closeOnClick: false,
+      closeOnClick: true,
       shading: true
     }, 'error', 10000);
   }
