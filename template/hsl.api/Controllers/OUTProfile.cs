@@ -29,15 +29,22 @@ namespace hsl.api.Controllers
 
         // GET api/profile/get
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery]string userName)
+        public async Task<IActionResult> Get([FromQuery] string userName)
         {
 
-//            var user = _userManager.Users.FirstOrDefault(u => u.UserName == userName);
-//            if (user == null) return new BadRequestObjectResult("User not found");
-
+            var user = _userManager.Users.FirstOrDefault(u => u.UserName == userName);
+            if (user == null) return new BadRequestObjectResult("User not found");
+            
+            
             return new OkObjectResult(new
             {
-                Message = "This is secure API and user data!",
+                userName = user.UserName,
+                displayName = user.DisplayName,
+                email = user.Email,
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                gender = user.Gender,
+                location = user.Location,
             });
         }
     }

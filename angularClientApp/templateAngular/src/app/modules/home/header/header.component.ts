@@ -23,7 +23,7 @@ export class HeaderComponent extends BaseComponent {
     this._auth.isLoggesIn.subscribe(x => {
       this.IsLoggedState = x;
     });
-    this.UserName$ = this._auth.currentUserName;
+    this.UserName$ = this._auth.currentUserDisplayName;
   }
 
   public SignOut() {

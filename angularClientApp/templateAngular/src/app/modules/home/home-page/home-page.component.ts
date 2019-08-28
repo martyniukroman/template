@@ -15,24 +15,4 @@ export class HomePageComponent extends BaseComponent {
     super();
   }
 
-  async ngOnInit() {
-    this.stroke = await this._dataS.getDataPromise('values');
-  }
-
-  onA() {
-    this.AlertNotification('Alert template text');
-  }
-
-  onS() {
-    this.SuccessNotification('Success template text');
-  }
-
-  onW() {
-    this.WarningNotification('Warning template text');
-  }
-
-  onE() {
-    this.ErrorNotification('Error template text');
-  }
-
 }

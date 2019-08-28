@@ -64,12 +64,23 @@ export class BaseInterceptor implements HttpInterceptor {
           }
 
           if (error.status == 401) {
-            console.log('got 401');
+            errorString = 'Token lifetime is expired you are forced to refresh your page to get a new AccessToken, this issue should be fixed by developer in future';
             if (!this.isTokenRefreshing) {
               this.isTokenRefreshing = true;
               this.tokenSubject.next(null);
-              console.log('RefreshTokenHandler');
-              return this._authService.GetNewRefreshToken().toPromise();
+              this._authService.GetNewRefreshToken().subscribe(result => {
+                console.log(result);
+                if (result && result.authToken.token) {
+                  localStorage.setItem('loginStatus', '1');
+                  localStorage.setItem('jwt', result.authToken.token);
+                  localStorage.setItem('username', result.authToken.username);
+                  localStorage.setItem('expiration', result.authToken.expiration);
+                  localStorage.setItem('userRole', result.authToken.roles);
+                  localStorage.setItem('refreshToken', result.authToken.refresh_token);
+                  localStorage.setItem('displayName', result.authToken.displayName);
+                  localStorage.setItem('userId', result.authToken.userId);
+                }
+              });
             } else {
               this.isTokenRefreshing = false;
             }
@@ -89,9 +100,9 @@ export class BaseInterceptor implements HttpInterceptor {
   private RaiseErrorMessage(text: string) {
     notify({
       message: text,
-      closeOnClick: true,
-      shading: false
-    }, 'error', 3000);
+      closeOnClick: false,
+      shading: true
+    }, 'error', 10000);
   }
 
 

@@ -1,18 +1,108 @@
-<!--<div class="fatherDiv" fxLayout="row" fxLayoutAlign="center center">-->
-<!--  <div class="nameBox">-->
-<!--    <p>id:</p>-->
-<!--    <p>eMail:</p>-->
-<!--    <p>First Name:</p>-->
-<!--    <p>Last Name:</p>-->
-<!--    <p>Gender:</p>-->
-<!--    <p>Location:</p>-->
-<!--  </div>-->
-<!--  <div class="valueBox">-->
-<!--    <p>{{responseData?.user.id}}</p>-->
-<!--    <p>{{responseData?.user.email}}</p>-->
-<!--    <p>{{responseData?.user.fName}}</p>-->
-<!--    <p>{{responseData?.user.lName}}</p>-->
-<!--    <p>{{responseData?.user.gender}}</p>-->
-<!--    <p>{{responseData?.user.location}}</p>-->
-<!--  </div>-->
-<!--</div>-->
+<!--    <p>{{responseData?.displayName}}</p>-->
+<!--    <p>{{responseData?.userName}}</p>-->
+<!--    <p>{{responseData?.email}}</p>-->
+<!--    <p>{{responseData?.firstName}}</p>-->
+<!--    <p>{{responseData?.lastName}}</p>-->
+<!--    <p>{{responseData?.gender}}</p>-->
+<div fxLayout="column" fxFlexAlign="center" fxLayoutAlign="center center">
+
+  <form [action]="'/'" (submit)="onFormSubmit($event)" *ngIf="responseData">
+    <div class="dx-form-group-with-caption">
+      <span class="dx-form-group-caption">Your profile data</span>
+      <br>
+      <hr>
+
+      <div class="dx-field">
+        <div class="dx-field-label">Display name</div>
+        <div class="dx-field-value">
+          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.displayName" placeholder="Display Name">
+            <dx-validator>
+              <dxi-validation-rule
+                type="required"
+                message="Required">
+              </dxi-validation-rule>
+            </dx-validator>
+          </dx-text-box>
+        </div>
+      </div>
+
+      <div class="dx-field">
+        <div class="dx-field-label" id="userNameLabel" style="color: #CDDC39" (mouseenter)="togglePop($event)" (mouseleave)="togglePop($event)">UserName</div>
+        <div class="dx-field-value">
+          <dx-text-box [readOnly]="true" [(value)]="responseData.userName" placeholder="UserName">
+            <dx-validator>
+              <dxi-validation-rule
+                type="required"
+                message="Required">
+              </dxi-validation-rule>
+            </dx-validator>
+          </dx-text-box>
+        </div>
+      </div>
+
+      <div class="dx-field">
+        <div class="dx-field-label" id="emailLabel" style="color: #CDDC39" (mouseenter)="togglePop($event)" (mouseleave)="togglePop($event)">Email</div>
+        <div class="dx-field-value">
+          <dx-text-box [readOnly]="true" [(value)]="responseData.email" placeholder="Email">
+            <dx-validator>
+              <dxi-validation-rule
+                type="required"
+                message="Required">
+              </dxi-validation-rule>
+            </dx-validator>
+          </dx-text-box>
+        </div>
+      </div>
+
+      <div class="dx-field">
+        <div class="dx-field-label">First Name</div>
+        <div class="dx-field-value">
+          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.firstName" placeholder="First Name">
+          </dx-text-box>
+        </div>
+      </div>
+
+      <div class="dx-field">
+        <div class="dx-field-label">Last Name</div>
+        <div class="dx-field-value">
+          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.lastName" placeholder="Last Name">
+          </dx-text-box>
+        </div>
+      </div>
+
+      <div class="dx-field">
+        <div class="dx-field-label">Gender</div>
+        <div class="dx-field-value">
+          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.gender" placeholder="Gender">
+          </dx-text-box>
+        </div>
+      </div>
+
+      <div class="dx-field">
+        <div class="dx-field-label">Location</div>
+        <div class="dx-field-value">
+          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.location" placeholder="Location">
+          </dx-text-box>
+        </div>
+      </div>
+
+      <br>
+      <dx-button stylingMode="text" style="float: right" *ngIf="!IsEditable" icon="edit" type="normal" (onClick)="toggleEdit()" text="edit"></dx-button>
+
+      <dx-button stylingMode="text" style="float: right; margin-left: 5px" *ngIf="IsEditable" icon="check" type="success" text="submit" [useSubmitBehavior]="true" ></dx-button>
+      <dx-button stylingMode="text" style="float: right" *ngIf="IsEditable" icon="close" type="default" (onClick)="cancelEdit()" text="cancel"></dx-button>
+
+    </div>
+  </form>
+</div>
+
+<!--ADDITIONAL POPOVERINFO-->
+<dx-popover
+  target="#{{popPosition}}"
+  position="top"
+  [width]="300"
+  [(visible)]="popVisible">
+  <div *dxTemplate="let data = model of 'content'">
+   {{popText}}
+  </div>
+</dx-popover>

@@ -11,7 +11,7 @@
       <div class="dx-field">
         <div class="dx-field-label">Email</div>
         <div class="dx-field-value">
-          <dx-text-box [(value)]="email" placeholder="Email">
+          <dx-text-box [(value)]="email" placeholder="Email" [showClearButton]="true">
             <dx-validator>
               <dxi-validation-rule
                 type="required"
@@ -25,7 +25,7 @@
       <div class="dx-field">
         <div class="dx-field-label">Password</div>
         <div class="dx-field-value">
-          <dx-text-box [(value)]="password" mode="password" placeholder="Password">
+          <dx-text-box [(value)]="password" mode="password" placeholder="Password" [showClearButton]="true">
             <dx-validator>
               <dxi-validation-rule
                 type="required"
@@ -37,8 +37,8 @@
       </div>
 
       <br>
-      <dx-button icon="todo" type="success" [useSubmitBehavior]="true" text="Login"></dx-button>
-      <dx-button style="margin-right: 5px;" stylingMode="text" type="normal" routerLink="/auth/register" text="Register"></dx-button>
+      <dx-button icon="key" type="success" [useSubmitBehavior]="true" text="Login"></dx-button>
+      <dx-button style="margin-right: 5px;" stylingMode="text" icon="increaseindent" type="normal" routerLink="/auth/register" text="Register"></dx-button>
 
     </div>
   </form>

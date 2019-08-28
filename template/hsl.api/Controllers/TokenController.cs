@@ -76,7 +76,7 @@ namespace hsl.api.Controllers
                 await _hslapiContext.SaveChangesAsync();
 
                 var response = await CreateAccessToken(user, newRefreshToken.Value);
-                return new OkObjectResult(new {access_token = response});
+                return new OkObjectResult(new {authToken = response});
             }
             catch (Exception e)
             {
@@ -141,6 +141,8 @@ namespace hsl.api.Controllers
                 refresh_token = rToken,
                 roles = roles.FirstOrDefault(),
                 username = user.UserName,
+                displayName = user.DisplayName,
+                userId = user.Id,
             };
         }
 
@@ -152,7 +154,7 @@ namespace hsl.api.Controllers
                 UserId = userId,
                 Value = Guid.NewGuid().ToString("N"),
                 CreatedDate = DateTime.UtcNow,
-                ExpiryTime = DateTime.UtcNow.AddMinutes(120), // more time
+                ExpiryTime = DateTime.UtcNow.AddDays(1),
             };
         }
     }

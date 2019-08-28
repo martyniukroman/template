@@ -29,5 +29,4 @@ export class SignInComponent extends BaseComponent {
     this._authService.Login(this.email, this.password);
   }
 
-
 }

@@ -21,6 +21,7 @@ export class AuthService extends BaseComponent {
   // User related properties
   private loginStatus = new BehaviorSubject<boolean>(this.checkLoginStatus());
   private UserName = new BehaviorSubject<string>(localStorage.getItem('username'));
+  private UserDisplayName = new BehaviorSubject<string>(localStorage.getItem('displayName'));
   private UserRole = new BehaviorSubject<string>(localStorage.getItem('userRole'));
 
 
@@ -41,37 +42,18 @@ export class AuthService extends BaseComponent {
 
   // Method to get new refresh token
   GetNewRefreshToken(): Observable<any> {
-    console.log('get new rtoken');
     let username = localStorage.getItem('username');
     let refreshToken = localStorage.getItem('refreshToken');
     const grantType = "refresh_token";
 
-    let response = this.http.post<any>(appConfig.BaseApiUrl + 'token/login',
+    return this.http.post<any>(appConfig.BaseApiUrl + 'token/login',
       {
         UserName: username,
         RefreshToken: refreshToken,
         GrantType: grantType
-      }).subscribe(result => {
-        console.log('result');
-        console.log(result);
-
-      if (result && result.authToken.token) {
-        this.loginStatus.next(true);
-        localStorage.setItem('loginStatus', '1');
-        localStorage.setItem('jwt', result.authToken.token);
-        localStorage.setItem('username', result.authToken.username);
-        localStorage.setItem('expiration', result.authToken.expiration);
-        localStorage.setItem('userRole', result.authToken.roles);
-        localStorage.setItem('refreshToken', result.authToken.refresh_token);
-      }
-
-      return response;
-
-    });
-
+      });
 
   }
-
 
   //Login Method
   Login(username: string, password: string) {
@@ -88,12 +70,15 @@ export class AuthService extends BaseComponent {
       if (x && x.authToken.token) {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem('loginStatus', '1');
+        localStorage.setItem('displayName', x.authToken.displayName);
+        localStorage.setItem('userId', x.authToken.userId);
         localStorage.setItem('jwt', x.authToken.token);
         localStorage.setItem('username', x.authToken.username);
         localStorage.setItem('expiration', x.authToken.expiration);
         localStorage.setItem('userRole', x.authToken.roles);
         localStorage.setItem('refreshToken', x.authToken.refresh_token);
         this.UserName.next(localStorage.getItem('username'));
+        this.UserName.next(localStorage.getItem('displayName'));
         this.UserRole.next(localStorage.getItem('userRole'));
         this.loginStatus.next(true);
         this.router.navigateByUrl('/home')
@@ -106,6 +91,8 @@ export class AuthService extends BaseComponent {
     // Set Loginstatus to false and delete saved jwt cookie
     localStorage.removeItem('jwt');
     localStorage.removeItem('userRole');
+    localStorage.removeItem('displayName');
+    localStorage.removeItem('userId');
     localStorage.removeItem('username');
     localStorage.removeItem('expiration');
     localStorage.setItem('loginStatus', '0');
@@ -133,7 +120,9 @@ export class AuthService extends BaseComponent {
   get currentUserName() {
     return this.UserName.asObservable();
   }
-
+  get currentUserDisplayName() {
+    return this.UserDisplayName.asObservable();
+  }
   get currentUserRole() {
     return this.UserRole.asObservable();
   }
