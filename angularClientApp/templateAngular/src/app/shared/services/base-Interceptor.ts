@@ -20,6 +20,7 @@ export class BaseInterceptor implements HttpInterceptor {
 
   private tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   private isTokenRefreshing: boolean = false;
+  private errorString: string = '';
 
   constructor(private _router: Router, private _authService: AuthService) {
   }
@@ -53,47 +54,36 @@ export class BaseInterceptor implements HttpInterceptor {
         return event;
       }),
       catchError((error: HttpErrorResponse) => {
-        let errorString = '';
 
-        if (!error.ok) {
+          this.errorString = '';
 
-          console.log('error->');
-          console.log(error);
-          if (error.error) {
-            errorString += ' ' + error.error;
-          }
+          if (!error.ok) {
 
-          if (error.status == 401) {
-            errorString = 'Token lifetime is expired you are forced to refresh your page to get a new AccessToken, this issue should be fixed by developer in future';
-            if (!this.isTokenRefreshing) {
-              this.isTokenRefreshing = true;
-              this.tokenSubject.next(null);
-              this._authService.GetNewRefreshToken().subscribe(result => {
-                console.log(result);
-                if (result && result.authToken.token) {
-                  localStorage.setItem('loginStatus', '1');
-                  localStorage.setItem('jwt', result.authToken.token);
-                  localStorage.setItem('username', result.authToken.username);
-                  localStorage.setItem('expiration', result.authToken.expiration);
-                  localStorage.setItem('userRole', result.authToken.roles);
-                  localStorage.setItem('refreshToken', result.authToken.refresh_token);
-                  localStorage.setItem('displayName', result.authToken.displayName);
-                  localStorage.setItem('userId', result.authToken.userId);
+            console.log('error->');
+            console.log(error);
+
+            if (error.status) {
+              if (error.error) {
+                if (error.error.caption)
+                  this.errorString += ' ' + error.error.caption;
+                if (error.error.afterAction == 'relogin') {
+                  this._authService.Logout();
+                  this._router.navigateByUrl('/auth/signin');
                 }
-              });
-            } else {
-              this.isTokenRefreshing = false;
+
+              }
+              if (error.status == 401) {
+                this.setTokenResponse();
+              }
             }
-          }
-          if (error.status == 0) {
-            errorString = 'No connection';
-          }
 
-          this.RaiseErrorMessage(errorString);
+            if (this.errorString)
+              this.RaiseErrorMessage(this.errorString);
 
+          }
+          return throwError(error);
         }
-        return throwError(error);
-      }));
+      ));
 
   }
 
@@ -102,7 +92,31 @@ export class BaseInterceptor implements HttpInterceptor {
       message: text,
       closeOnClick: true,
       shading: true
-    }, 'error', 10000);
+    }, 'error', 3000);
+    this.errorString = null;
+  }
+
+  private setTokenResponse(): void {
+    if (!this.isTokenRefreshing) {
+      this.isTokenRefreshing = true;
+      this.tokenSubject.next(null);
+      this._authService.GetNewRefreshToken().subscribe(result => {
+        console.log(result);
+        if (result && result.authToken.token) {
+          localStorage.setItem('loginStatus', '1');
+          localStorage.setItem('jwt', result.authToken.token);
+          localStorage.setItem('username', result.authToken.username);
+          localStorage.setItem('expiration', result.authToken.expiration);
+          localStorage.setItem('userRole', result.authToken.roles);
+          localStorage.setItem('refreshToken', result.authToken.refresh_token);
+          localStorage.setItem('displayName', result.authToken.displayName);
+          localStorage.setItem('userId', result.authToken.userId);
+        }
+          location.reload();
+      });
+    } else {
+      this.isTokenRefreshing = false;
+    }
   }
 
 

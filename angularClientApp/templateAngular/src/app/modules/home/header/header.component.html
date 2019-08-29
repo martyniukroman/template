@@ -19,8 +19,8 @@
       (onButtonClick)="onButtonClick($event)"
       (onItemClick)="onButtonItemClick($event)"
     ></dx-drop-down-button>
-    <dx-button *ngIf="IsLoggedState == false" [routerLink]="'/auth/register'" stylingMode="text" text="Register"></dx-button>
-    <dx-button *ngIf="IsLoggedState == false" [routerLink]="'/auth/signin'" stylingMode="text" text="Login"></dx-button>
+    <dx-button icon="increaseindent" *ngIf="IsLoggedState == false" [routerLink]="'/auth/register'" stylingMode="text" text="Register"></dx-button>
+    <dx-button icon="key" *ngIf="IsLoggedState == false" [routerLink]="'/auth/signin'" stylingMode="text" text="Login"></dx-button>
 
   </div>
 </div>

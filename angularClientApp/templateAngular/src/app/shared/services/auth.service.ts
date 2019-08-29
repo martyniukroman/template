@@ -78,7 +78,7 @@ export class AuthService extends BaseComponent {
         localStorage.setItem('userRole', x.authToken.roles);
         localStorage.setItem('refreshToken', x.authToken.refresh_token);
         this.UserName.next(localStorage.getItem('username'));
-        this.UserName.next(localStorage.getItem('displayName'));
+        this.UserDisplayName.next(localStorage.getItem('displayName'));
         this.UserRole.next(localStorage.getItem('userRole'));
         this.loginStatus.next(true);
         this.router.navigateByUrl('/home')
@@ -118,12 +118,17 @@ export class AuthService extends BaseComponent {
   }
 
   get currentUserName() {
+    this.UserName.next(localStorage.getItem('username'));
     return this.UserName.asObservable();
   }
+
   get currentUserDisplayName() {
+    this.UserDisplayName.next(localStorage.getItem('displayName'));
     return this.UserDisplayName.asObservable();
   }
+
   get currentUserRole() {
+    this.UserRole.next(localStorage.getItem('userRole'));
     return this.UserRole.asObservable();
   }
 

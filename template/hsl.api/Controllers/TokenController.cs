@@ -42,7 +42,12 @@ namespace hsl.api.Controllers
         {
             if (model == null)
             {
-                return new NotFoundObjectResult(new {message = "invalid model"});
+                return new BadRequestObjectResult(new ErrorViewModel
+                {
+                    code = 400,
+                    caption = "User not found",
+                    tag = "notFoundError"
+                });
             }
 
             switch (model.GrantType)
@@ -61,14 +66,31 @@ namespace hsl.api.Controllers
                     x.ClientId == _jwtIssuerOptions.ClientId && x.Value == model.RefreshToken);
 
                 if (refreshToken == null)
-                    return new BadRequestObjectResult("invalid refresh token");
+                    return new BadRequestObjectResult(new ErrorViewModel
+                    {
+                        code = 400,
+                        caption = "Invalid refresh token, you are forced to Re-Login",
+                        tag = "rTokenError",
+                        afterAction = "relogin"
+                    });
                 if (refreshToken.ExpiryTime < DateTime.UtcNow)
-                    return new BadRequestObjectResult("refresh token expired");
+                    return new BadRequestObjectResult(new ErrorViewModel
+                    {
+                        code = 400,
+                        caption = "Token lifetime is expired, you are forced to Re-Login",
+                        tag = "rTokenError",
+                        afterAction = "relogin"
+                    });
 
                 var user = await _userManager.FindByIdAsync(refreshToken.UserId);
 
                 if (user == null)
-                    return new BadRequestObjectResult("user not found");
+                    return new BadRequestObjectResult(new ErrorViewModel
+                    {
+                        code = 404,
+                        caption = "User not found",
+                        tag = "notFoundError"
+                    });
 
                 var newRefreshToken = CreateRefreshToken(refreshToken.ClientId, user.Id);
                 _hslapiContext.Tokens.Remove(refreshToken);
@@ -80,7 +102,12 @@ namespace hsl.api.Controllers
             }
             catch (Exception e)
             {
-                return new BadRequestObjectResult(new {message = e.Message, innerMessage = e.InnerException?.Message});
+                return new BadRequestObjectResult(new ErrorViewModel
+                {
+                    code = 500,
+                    caption = e.Message + ' ' + e.InnerException?.Message,
+                    tag = "exceptionError"
+                });
             }
         }
 
@@ -89,9 +116,8 @@ namespace hsl.api.Controllers
             var user = await _userManager.FindByEmailAsync(model.UserName);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                
                 //TODO: email validation isEmailConfirmed
-                
+
                 var newRefreshToken =
                     CreateRefreshToken(_jwtIssuerOptions.ClientId, user.Id); // client id might be null
                 var oldRefreshTokens = _hslapiContext.Tokens.Where(x => x.UserId == user.Id);
@@ -107,7 +133,12 @@ namespace hsl.api.Controllers
                 return new OkObjectResult(new {authToken = accessToken});
             }
 
-            return new BadRequestObjectResult("Please Check the Login Credentials - Invalid Username/Password was entered");
+            return new BadRequestObjectResult(new ErrorViewModel
+            {
+                code = 404,
+                caption = "Please Check the Login Credentials - Invalid Username/Password was entered",
+                tag = "notFoundError"
+            });
         }
 
         private async Task<TokenResponseModel> CreateAccessToken(User user, string rToken)

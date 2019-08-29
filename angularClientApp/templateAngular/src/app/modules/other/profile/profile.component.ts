@@ -29,6 +29,7 @@ export class ProfileComponent extends BaseComponent {
   public onFormSubmit(event) {
     event.preventDefault();
     this.WarningNotification('TODO: save changes to db');
+    this.toggleEdit();
   }
 
   public togglePop(event) {
