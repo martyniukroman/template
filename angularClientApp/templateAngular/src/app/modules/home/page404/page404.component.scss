@@ -2,13 +2,15 @@
 h1{
   font-size: 100px;
   color: black;
+  margin: 0;
   text-shadow: $systemWhite 3px 3px 0, $systemWhite -3px -3px 0;
 }
 p {
   margin-top: -20px;
   margin-bottom: 20px;
   color: black;
-  text-shadow: $systemWhite 0 0 5px, $systemWhite 0 0 10px;
+  text-shadow: $systemWhite 1px 1px 0, $systemWhite -1px -1px 0;
+  //text-shadow: $systemWhite 0 0 5px, $systemWhite 0 0 10px;
 }
 img{
   border-radius: 20px;

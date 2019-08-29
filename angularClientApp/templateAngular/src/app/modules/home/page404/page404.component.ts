@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import {getElement} from "devextreme-angular";
 
 @Component({
   selector: 'app-page404',
