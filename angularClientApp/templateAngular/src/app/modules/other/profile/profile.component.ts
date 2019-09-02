@@ -3,6 +3,7 @@ import {DataServiceProvider} from '../../../shared/services/DataServiceProvider'
 import {map} from 'rxjs/operators';
 import {BaseComponent} from "../../../shared/base.component";
 import {AuthService} from "../../../shared/services/auth.service";
+import {appConfig} from "../../../shared/config";
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,9 @@ export class ProfileComponent extends BaseComponent {
   public popVisible: boolean = false;
   public popPosition: string = '';
   public popText: string = '';
+
+  public imageValue: any[] = [];
+  public picUploadUrl = appConfig.BaseApiUrl + 'profile/uploadPicture';
 
   constructor(private _dataProvider: DataServiceProvider, private authService: AuthService) {
     super();

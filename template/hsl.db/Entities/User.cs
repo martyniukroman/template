@@ -16,5 +16,7 @@ namespace hsl.api.Models
         public string Locale { get; set; }
         public string Gender { get; set; }
         public IList<RefreshTokenModel> Tokens { get; set; }
+        
+        public virtual Image Picture { get; set; }
     }
 }

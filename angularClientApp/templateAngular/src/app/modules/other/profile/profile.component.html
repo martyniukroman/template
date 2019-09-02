@@ -6,6 +6,16 @@
 <!--    <p>{{responseData?.gender}}</p>-->
 <div fxLayout="column" fxFlexAlign="center" fxLayoutAlign="center center">
 
+  <div class="file-uploader-block">
+    <dx-file-uploader
+      [multiple]="false"
+      [uploadMode]="'useButtons'"
+      [uploadUrl]="picUploadUrl"
+      [(value)]="imageValue"
+      [allowedFileExtensions]="['.jpg', '.jpeg', '.gif', '.png']">
+    </dx-file-uploader>
+  </div>
+
   <form [action]="'/'" (submit)="onFormSubmit($event)" *ngIf="responseData">
     <div class="dx-form-group-with-caption">
       <span class="dx-form-group-caption">Your profile data</span>

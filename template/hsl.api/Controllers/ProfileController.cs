@@ -71,5 +71,17 @@ namespace hsl.api.Controllers
                 }); 
             }
         }
+        
+        [HttpPost]
+        public ActionResult UploadPicture(object file)
+        {
+
+            string imageName = null;
+
+var postedFile = HttpRequest.file
+
+            return new EmptyResult();
+        }
+        
     }
 }

@@ -4,7 +4,7 @@ import {RouterModule} from "@angular/router";
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {ProfileComponent} from './profile/profile.component';
 import {DxButtonModule} from "devextreme-angular/ui/button";
-import {DxPopoverModule, DxTextBoxModule, DxValidatorModule} from "devextreme-angular";
+import {DxFileUploaderModule, DxPopoverModule, DxTextBoxModule, DxValidatorModule} from "devextreme-angular";
 
 @NgModule({
   declarations: [
@@ -15,6 +15,7 @@ import {DxPopoverModule, DxTextBoxModule, DxValidatorModule} from "devextreme-an
     DxButtonModule,
     DxPopoverModule,
     FlexLayoutModule,
+    DxFileUploaderModule,
     DxValidatorModule,
     DxTextBoxModule,
     RouterModule.forChild([
