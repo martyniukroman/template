@@ -23,7 +23,7 @@ export class DataServiceProvider extends BaseComponent {
   }
 
   public postData(path: string, body: any) {
-    return this.http.get<any>(appConfig.BaseApiUrl + path, body);
+    return this.http.post(appConfig.BaseApiUrl + path, body);
   }
 
   public putData(path: string, body: any) {

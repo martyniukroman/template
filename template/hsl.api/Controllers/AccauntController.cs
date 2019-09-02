@@ -13,13 +13,11 @@ namespace hsl.api.Controllers
     public class AccauntController : ControllerBase
     {
         private UserManager<User> _userManager;
-//        private SignInManager<User> _signInManager;
         private JwtIssuerOptions _jwtIssuerOptions;
 
         public AccauntController(UserManager<User> userManager, IOptions<JwtIssuerOptions> jwtIssuerOptions)
         {
             this._userManager = userManager;
-//            this._signInManager = signInManager;
             this._jwtIssuerOptions = jwtIssuerOptions.Value;
         }
 
@@ -64,6 +62,18 @@ namespace hsl.api.Controllers
             }
 
             //TODO: send confirmation email
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> IsUserNameExist([FromQuery] string username)
+        {
+            return new OkObjectResult( await _userManager.FindByNameAsync(username) != null);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> IsUserEmailExist([FromQuery] string useremail)
+        {
+            return new OkObjectResult( await _userManager.FindByEmailAsync(useremail) != null);
         }
         
     }

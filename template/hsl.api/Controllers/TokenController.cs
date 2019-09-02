@@ -114,6 +114,11 @@ namespace hsl.api.Controllers
         private async Task<IActionResult> GenerateNewToken(TokenRequestModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.UserName);
+
+            if (user == null)
+                user = await _userManager.FindByNameAsync(model.UserName);
+
+
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 //TODO: email validation isEmailConfirmed

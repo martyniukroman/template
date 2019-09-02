@@ -9,13 +9,18 @@
       <br>
 
       <div class="dx-field">
-        <div class="dx-field-label">Display name</div>
+        <div class="dx-field-label">Username</div>
         <div class="dx-field-value">
-          <dx-text-box [(value)]="registerForm.DisplayName" placeholder="Display Name">
+          <dx-text-box [(value)]="registerForm.DisplayName" placeholder="Username">
             <dx-validator>
               <dxi-validation-rule
                 type="required"
                 message="Required">
+              </dxi-validation-rule>
+              <dxi-validation-rule
+                type="custom"
+                message="Username is not valid"
+                [validationCallback]="validateUsername">
               </dxi-validation-rule>
             </dx-validator>
           </dx-text-box>
@@ -72,7 +77,8 @@
 
       <br>
       <dx-button icon="todo" type="success" [useSubmitBehavior]="true" text="Register"></dx-button>
-      <dx-button style="margin-right: 5px;" stylingMode="text" icon="key" type="normal" routerLink="/auth/signin" text="Login"></dx-button>
+      <dx-button style="margin-right: 5px;" stylingMode="text" icon="key" type="normal" routerLink="/auth/signin"
+                 text="Login"></dx-button>
 
     </div>
   </form>

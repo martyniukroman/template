@@ -79,7 +79,8 @@ export class AuthService extends BaseComponent {
         this.UserDisplayName.next(localStorage.getItem('displayName'));
         this.UserRole.next(localStorage.getItem('userRole'));
         this.loginStatus.next(true);
-        this.router.navigateByUrl('/home')
+        this.router.navigateByUrl('/home');
+        this.SuccessNotification('Welcome back ' + localStorage.getItem('displayName'));
       }
 
     });

@@ -19,7 +19,7 @@ export abstract class BaseComponent implements OnInit {
     notify({
       message: text,
       closeOnClick: true,
-      shading: false
+      shading: false,
     }, 'success', 1000);
   }
 

@@ -64,13 +64,16 @@ export class BaseInterceptor implements HttpInterceptor {
 
             if (error.status) {
               if (error.error) {
-                if (error.error.caption)
+                if (error.error.caption) {
                   this.errorString += ' ' + error.error.caption;
+                }
+                else {
+                  this.errorString += ' ' + error.error;
+                }
                 if (error.error.afterAction == 'relogin') {
                   this._authService.Logout();
                   this._router.navigateByUrl('/auth/signin');
                 }
-
               }
               if (error.status == 401) {
                 this.setTokenResponse();

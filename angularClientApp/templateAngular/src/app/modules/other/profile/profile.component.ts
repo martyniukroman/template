@@ -52,7 +52,7 @@ export class ProfileComponent extends BaseComponent {
   public togglePop(event) {
     this.popPosition = event.srcElement.id;
     if (this.popPosition == 'userNameLabel')
-      this.popText = 'In future you will be able to login with the USERNAME as well as with EMAIL';
+      this.popText = 'You are able to login with the *USERNAME* as well as with *EMAIL*';
 
     if (this.popPosition == 'emailLabel') {
       this.popText = 'Temporary not allowed to change email';
