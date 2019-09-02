@@ -44,6 +44,7 @@ export class HeaderComponent extends BaseComponent {
   }
 
   onButtonItemClick(e) {
+    if (e.itemData.value == 1) this._router.navigateByUrl('/other/profile');
     if (e.itemData.value == 4) this.SignOut();
   }
 

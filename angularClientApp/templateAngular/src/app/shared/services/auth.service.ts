@@ -19,17 +19,15 @@ export class AuthService extends BaseComponent {
   }
 
   // User related properties
-  private loginStatus = new BehaviorSubject<boolean>(this.checkLoginStatus());
-  private UserName = new BehaviorSubject<string>(localStorage.getItem('username'));
-  private UserDisplayName = new BehaviorSubject<string>(localStorage.getItem('displayName'));
-  private UserRole = new BehaviorSubject<string>(localStorage.getItem('userRole'));
+  public loginStatus = new BehaviorSubject<boolean>(this.checkLoginStatus());
+  public UserName = new BehaviorSubject<string>(localStorage.getItem('username'));
+  public UserDisplayName = new BehaviorSubject<string>(localStorage.getItem('displayName'));
+  public UserRole = new BehaviorSubject<string>(localStorage.getItem('userRole'));
 
 
   // Register Method
   Register(data) {
     return this.http.post<any>(appConfig.BaseApiUrl + 'accaunt/register', data).subscribe(x => {
-      console.log(x);
-
       if (x.email && x.status == 1) {
         this.SuccessNotification('Your account successfully created');
         this.router.navigateByUrl('/auth/signin');

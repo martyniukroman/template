@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {DataServiceProvider} from '../../../shared/services/DataServiceProvider';
 import {map} from 'rxjs/operators';
 import {BaseComponent} from "../../../shared/base.component";
+import {AuthService} from "../../../shared/services/auth.service";
 
 @Component({
   selector: 'app-profile',
@@ -18,7 +19,7 @@ export class ProfileComponent extends BaseComponent {
   public popPosition: string = '';
   public popText: string = '';
 
-  constructor(private _dataProvider: DataServiceProvider) {
+  constructor(private _dataProvider: DataServiceProvider, private authService: AuthService) {
     super();
   }
 
@@ -26,9 +27,25 @@ export class ProfileComponent extends BaseComponent {
     await this.getResponseData();
   }
 
-  public onFormSubmit(event) {
+  public async onFormSubmit(event) {
     event.preventDefault();
-    this.WarningNotification('TODO: save changes to db');
+    let storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      this.responseData.userId = storedUserId;
+      this._dataProvider.putData('profile/Update', this.responseData)
+        .subscribe(x => {
+          console.log(x);
+          if (x) {
+            this.responseData = x;
+            this.SuccessNotification('Success');
+          }
+          if (x.displayName) {
+            localStorage.setItem('displayName', x.displayName);
+            this.authService.UserDisplayName.next(x.displayName);
+          }
+        });
+    }
+
     this.toggleEdit();
   }
 
@@ -46,19 +63,19 @@ export class ProfileComponent extends BaseComponent {
   public toggleEdit() {
     this.IsEditable = !this.IsEditable;
   }
-  public async cancelEdit(){
+
+  public async cancelEdit() {
     this.responseData = {};
     await this.getResponseData();
     this.toggleEdit();
   }
 
-  public getResponseData(){
-    let username = localStorage.getItem('username');
-    if (username) {
-      this._dataProvider.getDataObservable('profile/get' + '?userName=' + username).subscribe(x => {
+  public getResponseData() {
+    let storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      this._dataProvider.getDataObservable('profile/get' + '?userId=' + storedUserId).subscribe(x => {
         this.responseData = x;
       });
-      console.log(this.responseData);
     }
   }
 

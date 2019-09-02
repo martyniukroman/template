@@ -17,7 +17,7 @@ import {AuthService} from './auth.service';
 @Injectable()
 export class BaseInterceptor implements HttpInterceptor {
 
-
+//TODO: move to baseComponent
   private tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   private isTokenRefreshing: boolean = false;
   private errorString: string = '';
@@ -112,7 +112,7 @@ export class BaseInterceptor implements HttpInterceptor {
           localStorage.setItem('displayName', result.authToken.displayName);
           localStorage.setItem('userId', result.authToken.userId);
         }
-          location.reload();
+        location.reload();
       });
     } else {
       this.isTokenRefreshing = false;

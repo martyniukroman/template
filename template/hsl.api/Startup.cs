@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Text;
+using hsl.bl.Interfaces;
+using hsl.bl.Services;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
@@ -118,6 +120,7 @@ namespace hsl.api
 
             // Initialization dependency injection
             services.AddScoped<RefreshTokenModel>();
+            services.AddScoped<IProfile, ProfileService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

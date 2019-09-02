@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.28307.705
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hsl.api", "hsl.api\hsl.api.csproj", "{90E16A0C-7BFC-4A7E-8167-4EFD9121E99D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hsl.bl", "hsl.bl\hsl.bl.csproj", "{529F958C-632D-4F6A-9BC9-4B6826348BCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hsl.db", "hsl.db\hsl.db.csproj", "{4D7B9434-264D-4194-9DB9-D4AA7D251B83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{90E16A0C-7BFC-4A7E-8167-4EFD9121E99D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90E16A0C-7BFC-4A7E-8167-4EFD9121E99D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90E16A0C-7BFC-4A7E-8167-4EFD9121E99D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{529F958C-632D-4F6A-9BC9-4B6826348BCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{529F958C-632D-4F6A-9BC9-4B6826348BCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{529F958C-632D-4F6A-9BC9-4B6826348BCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{529F958C-632D-4F6A-9BC9-4B6826348BCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D7B9434-264D-4194-9DB9-D4AA7D251B83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D7B9434-264D-4194-9DB9-D4AA7D251B83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D7B9434-264D-4194-9DB9-D4AA7D251B83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D7B9434-264D-4194-9DB9-D4AA7D251B83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

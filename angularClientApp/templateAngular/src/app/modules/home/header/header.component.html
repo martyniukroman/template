@@ -2,11 +2,8 @@
   <div class="fatherDiv" fxLayout="row" fxLayoutAlign="start center">
 
     <dx-button icon="home" [routerLink]="'/home'" stylingMode="text"></dx-button>
-
-  </div>
-  <div class="fatherDiv" fxLayout="row" fxLayoutAlign="end center">
-
     <dx-drop-down-button
+      style="min-width: 200px !important;"
       *ngIf="IsLoggedState == true"
       [splitButton]="true"
       [useSelectMode]="false"
@@ -19,6 +16,10 @@
       (onButtonClick)="onButtonClick($event)"
       (onItemClick)="onButtonItemClick($event)"
     ></dx-drop-down-button>
+
+  </div>
+  <div class="fatherDiv" fxLayout="row" fxLayoutAlign="end center">
+
     <dx-button icon="increaseindent" *ngIf="IsLoggedState == false" [routerLink]="'/auth/register'" stylingMode="text" text="Register"></dx-button>
     <dx-button icon="key" *ngIf="IsLoggedState == false" [routerLink]="'/auth/signin'" stylingMode="text" text="Login"></dx-button>
 

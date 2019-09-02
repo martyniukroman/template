@@ -7,4 +7,11 @@ namespace hsl.api.Models
         public string caption { get; set; }
         public string afterAction { get; set; }
     }
+
+//TODO: enum
+//    enum ErrorTag
+//    {
+//        notFoundError = 1,
+//        exceptionError, 
+//    }
 }
