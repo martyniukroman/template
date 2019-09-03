@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {DataServiceProvider} from '../../../shared/services/DataServiceProvider';
 import {map} from 'rxjs/operators';
 import {BaseComponent} from "../../../shared/base.component";
 import {AuthService} from "../../../shared/services/auth.service";
 import {appConfig} from "../../../shared/config";
+import {DxFileUploaderComponent} from "devextreme-angular";
 
 @Component({
   selector: 'app-profile',
@@ -11,6 +12,8 @@ import {appConfig} from "../../../shared/config";
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent extends BaseComponent {
+
+  @ViewChild(DxFileUploaderComponent, {static: false}) fileUploader: DxFileUploaderComponent;
 
   public responseData: any;
 
@@ -21,7 +24,7 @@ export class ProfileComponent extends BaseComponent {
   public popText: string = '';
 
   public imageValue: any[] = [];
-  public picUploadUrl = appConfig.BaseApiUrl + 'profile/uploadPicture';
+  public picUploadUrl = appConfig.BaseApiUrl + 'profile/UploadPicture';
 
   constructor(private _dataProvider: DataServiceProvider, private authService: AuthService) {
     super();
@@ -81,6 +84,15 @@ export class ProfileComponent extends BaseComponent {
         this.responseData = x;
       });
     }
+  }
+
+  public FileUploaded(event) {
+    console.log(event);
+    this.fileUploader.instance.reset();
+  }
+
+  public FileError(event) {
+    console.log(event);
   }
 
 }

@@ -8,11 +8,13 @@
 
   <div class="file-uploader-block">
     <dx-file-uploader
+      [uploadMethod]="'POST'"
       [multiple]="false"
-      [uploadMode]="'useButtons'"
+      [uploadMode]="'instantly'"
       [uploadUrl]="picUploadUrl"
-      [(value)]="imageValue"
-      [allowedFileExtensions]="['.jpg', '.jpeg', '.gif', '.png']">
+      [allowedFileExtensions]="['.jpg', '.jpeg', '.gif', '.png']"
+      (onUploaded)="FileUploaded($event)"
+      (onUploadError)="FileError($event)">
     </dx-file-uploader>
   </div>
 

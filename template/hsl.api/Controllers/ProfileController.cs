@@ -1,5 +1,9 @@
 using System;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using hsl.api.Models;
@@ -16,7 +20,7 @@ namespace hsl.api.Controllers
     [Authorize(Policy = "RequireLoggedIn")]
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class ProfileController : Controller
+    public class ProfileController : ControllerBase
     {
         private readonly ClaimsPrincipal _caller;
         private readonly IProfile _profileService;
@@ -72,15 +76,31 @@ namespace hsl.api.Controllers
             }
         }
         
+
         [HttpPost]
-        public ActionResult UploadPicture(object file)
+        public IActionResult UpdateImage()
         {
+            try
+            {
+                var file = Request.Form.Files[0];
+                var sb = "";
 
-            string imageName = null;
+                if (file.Length > 0)
+                {
+                    
+                }
 
-//var postedFile = HttpRequest.file
-
-            return new EmptyResult();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(new ErrorViewModel
+                {
+                    code = 500,
+                    caption = ex.Message + ' ' + ex.InnerException?.Message,
+                    tag = "exceptionError"
+                }); 
+            }
         }
         
     }
