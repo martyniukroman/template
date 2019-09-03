@@ -11,7 +11,7 @@
       <div class="dx-field">
         <div class="dx-field-label">Username</div>
         <div class="dx-field-value">
-          <dx-text-box [(value)]="registerForm.DisplayName" placeholder="Username">
+          <dx-text-box [(value)]="registerForm.DisplayName" placeholder="Username" [showClearButton]="true">
             <dx-validator>
               <dxi-validation-rule
                 type="required"
@@ -30,7 +30,7 @@
       <div class="dx-field">
         <div class="dx-field-label">Email</div>
         <div class="dx-field-value">
-          <dx-text-box [(value)]="registerForm.Email" placeholder="Email">
+          <dx-text-box [(value)]="registerForm.Email" placeholder="Email" [showClearButton]="true">
             <dx-validator>
               <dxi-validation-rule
                 type="required"
@@ -49,7 +49,7 @@
       <div class="dx-field">
         <div class="dx-field-label">Gender</div>
         <div class="dx-field-value">
-          <dx-text-box [(value)]="registerForm.Gender" placeholder="Gender">
+          <dx-text-box [(value)]="registerForm.Gender" placeholder="Gender" [showClearButton]="true">
             <dx-validator>
             </dx-validator>
           </dx-text-box>
@@ -59,7 +59,7 @@
       <div class="dx-field">
         <div class="dx-field-label">Password</div>
         <div class="dx-field-value">
-          <dx-text-box [(value)]="registerForm.Password" mode="password" placeholder="Password">
+          <dx-text-box [(value)]="registerForm.Password" mode="password" placeholder="Password" [showClearButton]="true">
             <dx-validator>
               <dxi-validation-rule
                 type="required"

@@ -10,8 +10,8 @@ using hsl.api.Models;
 namespace hsl.api.Migrations
 {
     [DbContext(typeof(hslapiContext))]
-    [Migration("20190808123235_refreshTokens")]
-    partial class refreshTokens
+    [Migration("20190903074258_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,58 +21,20 @@ namespace hsl.api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("hsl.api.Models.Customer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Gender");
-
-                    b.Property<string>("IdentityId");
-
-                    b.Property<string>("IdentityUserId");
-
-                    b.Property<string>("Locale");
-
-                    b.Property<string>("Location");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdentityUserId");
-
-                    b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("hsl.api.Models.Good", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Caption");
-
-                    b.Property<string>("picUrl");
-
-                    b.Property<DateTime>("publishDate");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Goods");
-                });
-
             modelBuilder.Entity("hsl.api.Models.RefreshTokenModel", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("ExpiresUtc");
+                    b.Property<string>("ClientId");
 
-                    b.Property<bool>("Revoked");
+                    b.Property<DateTime>("CreatedDate");
 
-                    b.Property<string>("Token");
+                    b.Property<DateTime>("ExpiryTime");
 
                     b.Property<string>("UserId");
+
+                    b.Property<string>("Value");
 
                     b.HasKey("Id");
 
@@ -81,7 +43,51 @@ namespace hsl.api.Migrations
                     b.ToTable("AspNetRefreshTokens");
                 });
 
-            modelBuilder.Entity("hsl.api.Models.User", b =>
+            modelBuilder.Entity("hsl.db.Entities.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Caption");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Image");
+                });
+
+            modelBuilder.Entity("hsl.db.Entities.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Caption");
+
+                    b.Property<int?>("ImageId");
+
+                    b.Property<int>("InCart");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("PictureUrl");
+
+                    b.Property<double>("Price");
+
+                    b.Property<DateTime>("PublishDate");
+
+                    b.Property<int>("StockCount");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("hsl.db.Entities.User", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -90,6 +96,8 @@ namespace hsl.api.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
+
+                    b.Property<string>("DisplayName");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
@@ -101,6 +109,8 @@ namespace hsl.api.Migrations
                     b.Property<string>("FirstName");
 
                     b.Property<string>("Gender");
+
+                    b.Property<int?>("ImageId");
 
                     b.Property<string>("LastName");
 
@@ -130,10 +140,14 @@ namespace hsl.api.Migrations
 
                     b.Property<bool>("TwoFactorEnabled");
 
+                    b.Property<int>("Type");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -168,6 +182,12 @@ namespace hsl.api.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new { Id = "1", Name = "Admin", NormalizedName = "ADMIN" },
+                        new { Id = "2", Name = "Customer", NormalizedName = "CUSTOMER" },
+                        new { Id = "3", Name = "Moderator", NormalizedName = "MODERATOR" }
+                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -212,11 +232,9 @@ namespace hsl.api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128);
+                    b.Property<string>("ProviderKey");
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -247,11 +265,9 @@ namespace hsl.api.Migrations
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(128);
+                    b.Property<string>("Name");
 
                     b.Property<string>("Value");
 
@@ -260,18 +276,25 @@ namespace hsl.api.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("hsl.api.Models.Customer", b =>
-                {
-                    b.HasOne("hsl.api.Models.User", "IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("IdentityUserId");
-                });
-
             modelBuilder.Entity("hsl.api.Models.RefreshTokenModel", b =>
                 {
-                    b.HasOne("hsl.api.Models.User", "User")
+                    b.HasOne("hsl.db.Entities.User", "User")
                         .WithMany("Tokens")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("hsl.db.Entities.Product", b =>
+                {
+                    b.HasOne("hsl.db.Entities.Image", "Image")
+                        .WithMany("Product")
+                        .HasForeignKey("ImageId");
+                });
+
+            modelBuilder.Entity("hsl.db.Entities.User", b =>
+                {
+                    b.HasOne("hsl.db.Entities.Image", "Image")
+                        .WithMany("User")
+                        .HasForeignKey("ImageId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -284,7 +307,7 @@ namespace hsl.api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("hsl.api.Models.User")
+                    b.HasOne("hsl.db.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -292,7 +315,7 @@ namespace hsl.api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("hsl.api.Models.User")
+                    b.HasOne("hsl.db.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -305,7 +328,7 @@ namespace hsl.api.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("hsl.api.Models.User")
+                    b.HasOne("hsl.db.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -313,7 +336,7 @@ namespace hsl.api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("hsl.api.Models.User")
+                    b.HasOne("hsl.db.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

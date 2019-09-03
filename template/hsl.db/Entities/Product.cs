@@ -1,7 +1,7 @@
 using System;
-using System.Buffers.Text;
+using System.Collections.Generic;
 
-namespace hsl.api.Models
+namespace hsl.db.Entities
 {
     public class Product
     {
@@ -9,10 +9,12 @@ namespace hsl.api.Models
         public string Name { get; set; }
         public string Caption { get; set; }
         public string PictureUrl { get; set; }
-        public string StockCount { set; get; }
+        public int StockCount { set; get; }
+        public int InCart { set; get; }
         public double Price { set; get; }
         public DateTime PublishDate { get; set; }
         
-        public virtual Image Picture { get; set; }
+        public int? ImageId { get; set; }
+        public Image Image { get; set; }
     }
 }

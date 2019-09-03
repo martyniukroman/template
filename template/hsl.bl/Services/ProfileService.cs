@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using hsl.api.Models;
 using hsl.bl.Interfaces;
+using hsl.db.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;

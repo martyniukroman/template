@@ -25,7 +25,7 @@
       <div class="dx-field">
         <div class="dx-field-label">Display name</div>
         <div class="dx-field-value">
-          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.displayName" placeholder="Display Name">
+          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.displayName" placeholder="Display Name" [showClearButton]="true">
             <dx-validator>
               <dxi-validation-rule
                 type="required"
@@ -39,7 +39,7 @@
       <div class="dx-field">
         <div class="dx-field-label" id="userNameLabel" style="color: #CDDC39" (mouseenter)="togglePop($event)" (mouseleave)="togglePop($event)"><i class="dx-icon-info"></i> UserName</div>
         <div class="dx-field-value">
-          <dx-text-box [readOnly]="true" [(value)]="responseData.userName" placeholder="UserName">
+          <dx-text-box [readOnly]="true" [(value)]="responseData.userName" placeholder="UserName" [showClearButton]="true">
             <dx-validator>
               <dxi-validation-rule
                 type="required"
@@ -53,7 +53,7 @@
       <div class="dx-field">
         <div class="dx-field-label" id="emailLabel" style="color: #CDDC39" (mouseenter)="togglePop($event)" (mouseleave)="togglePop($event)"><i class="dx-icon-info"></i> Email</div>
         <div class="dx-field-value">
-          <dx-text-box [readOnly]="true" [(value)]="responseData.email" placeholder="Email">
+          <dx-text-box [readOnly]="true" [(value)]="responseData.email" placeholder="Email" [showClearButton]="true">
             <dx-validator>
               <dxi-validation-rule
                 type="required"
@@ -67,7 +67,7 @@
       <div class="dx-field">
         <div class="dx-field-label">First Name</div>
         <div class="dx-field-value">
-          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.firstName" placeholder="First Name">
+          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.firstName" placeholder="First Name" [showClearButton]="true">
           </dx-text-box>
         </div>
       </div>
@@ -75,7 +75,7 @@
       <div class="dx-field">
         <div class="dx-field-label">Last Name</div>
         <div class="dx-field-value">
-          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.lastName" placeholder="Last Name">
+          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.lastName" placeholder="Last Name" [showClearButton]="true">
           </dx-text-box>
         </div>
       </div>
@@ -83,7 +83,7 @@
       <div class="dx-field">
         <div class="dx-field-label">Gender</div>
         <div class="dx-field-value">
-          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.gender" placeholder="Gender">
+          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.gender" placeholder="Gender" [showClearButton]="true">
           </dx-text-box>
         </div>
       </div>
@@ -91,7 +91,7 @@
       <div class="dx-field">
         <div class="dx-field-label">Location</div>
         <div class="dx-field-value">
-          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.location" placeholder="Location">
+          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.location" placeholder="Location" [showClearButton]="true">
           </dx-text-box>
         </div>
       </div>
@@ -106,7 +106,7 @@
   </form>
 </div>
 
-<!--ADDITIONAL POPOVERINFO-->
+<!--ADDITIONAL POP_OVER_INFO-->
 <dx-popover
   target="#{{popPosition}}"
   position="top"

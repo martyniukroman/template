@@ -13,6 +13,7 @@ using System.Net;
 using System.Text;
 using hsl.bl.Interfaces;
 using hsl.bl.Services;
+using hsl.db.Entities;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;

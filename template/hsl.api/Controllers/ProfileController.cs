@@ -78,7 +78,7 @@ namespace hsl.api.Controllers
 
             string imageName = null;
 
-var postedFile = HttpRequest.file
+//var postedFile = HttpRequest.file
 
             return new EmptyResult();
         }
