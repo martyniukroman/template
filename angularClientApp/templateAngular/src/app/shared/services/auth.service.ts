@@ -117,17 +117,14 @@ export class AuthService extends BaseComponent {
   }
 
   get currentUserName() {
-    this.UserName.next(localStorage.getItem('username'));
     return this.UserName.asObservable();
   }
 
   get currentUserDisplayName() {
-    this.UserDisplayName.next(localStorage.getItem('displayName'));
     return this.UserDisplayName.asObservable();
   }
 
   get currentUserRole() {
-    this.UserRole.next(localStorage.getItem('userRole'));
     return this.UserRole.asObservable();
   }
 

@@ -5,6 +5,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {ProfileComponent} from './profile/profile.component';
 import {DxButtonModule} from "devextreme-angular/ui/button";
 import {DxFileUploaderModule, DxPopoverModule, DxTextBoxModule, DxValidatorModule} from "devextreme-angular";
+import {AuthGuard} from "../../shared/guards/auth-gurard";
 
 @NgModule({
   declarations: [
@@ -19,8 +20,11 @@ import {DxFileUploaderModule, DxPopoverModule, DxTextBoxModule, DxValidatorModul
     DxValidatorModule,
     DxTextBoxModule,
     RouterModule.forChild([
-      {path: 'profile', component: ProfileComponent}
+      {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]}
     ]),
+  ],
+  providers: [
+    AuthGuard
   ],
   exports: [],
 })
