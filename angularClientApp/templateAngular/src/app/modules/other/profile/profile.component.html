@@ -6,28 +6,18 @@
 <!--    <p>{{responseData?.gender}}</p>-->
 <div fxLayout="column" fxFlexAlign="center" fxLayoutAlign="center center">
 
-  <div class="file-uploader-block">
-    <dx-file-uploader
-      [uploadMethod]="'POST'"
-      [multiple]="false"
-      [uploadMode]="'instantly'"
-      [uploadUrl]="picUploadUrl"
-      [allowedFileExtensions]="['.jpg', '.jpeg', '.gif', '.png']"
-      (onUploaded)="FileUploaded($event)"
-      (onUploadError)="FileError($event)">
-    </dx-file-uploader>
-  </div>
-
   <form [action]="'/'" (submit)="onFormSubmit($event)" *ngIf="responseData">
     <div class="dx-form-group-with-caption">
-      <span class="dx-form-group-caption">Your profile data</span>
+      <span *ngIf="!IsEditable" class="dx-form-group-caption">Your profile data</span>
+      <span *ngIf="IsEditable" class="dx-form-group-caption">Edit</span>
       <br>
       <hr>
 
       <div class="dx-field">
         <div class="dx-field-label">Display name</div>
         <div class="dx-field-value">
-          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.displayName" placeholder="Display Name" [showClearButton]="true">
+          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.displayName" placeholder="Display Name"
+                       [showClearButton]="true">
             <dx-validator>
               <dxi-validation-rule
                 type="required"
@@ -39,9 +29,12 @@
       </div>
 
       <div class="dx-field">
-        <div class="dx-field-label" id="userNameLabel" style="color: #CDDC39" (mouseenter)="togglePop($event)" (mouseleave)="togglePop($event)"><i class="dx-icon-info"></i> UserName</div>
+        <div class="dx-field-label" id="userNameLabel" style="color: #CDDC39" (mouseenter)="togglePop($event)"
+             (mouseleave)="togglePop($event)"><i class="dx-icon-info"></i> UserName
+        </div>
         <div class="dx-field-value">
-          <dx-text-box [readOnly]="true" [(value)]="responseData.userName" placeholder="UserName" [showClearButton]="true">
+          <dx-text-box [readOnly]="true" [(value)]="responseData.userName" placeholder="UserName"
+                       [showClearButton]="true">
             <dx-validator>
               <dxi-validation-rule
                 type="required"
@@ -53,7 +46,9 @@
       </div>
 
       <div class="dx-field">
-        <div class="dx-field-label" id="emailLabel" style="color: #CDDC39" (mouseenter)="togglePop($event)" (mouseleave)="togglePop($event)"><i class="dx-icon-info"></i> Email</div>
+        <div class="dx-field-label" id="emailLabel" style="color: #CDDC39" (mouseenter)="togglePop($event)"
+             (mouseleave)="togglePop($event)"><i class="dx-icon-info"></i> Email
+        </div>
         <div class="dx-field-value">
           <dx-text-box [readOnly]="true" [(value)]="responseData.email" placeholder="Email" [showClearButton]="true">
             <dx-validator>
@@ -69,7 +64,8 @@
       <div class="dx-field">
         <div class="dx-field-label">First Name</div>
         <div class="dx-field-value">
-          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.firstName" placeholder="First Name" [showClearButton]="true">
+          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.firstName" placeholder="First Name"
+                       [showClearButton]="true">
           </dx-text-box>
         </div>
       </div>
@@ -77,7 +73,8 @@
       <div class="dx-field">
         <div class="dx-field-label">Last Name</div>
         <div class="dx-field-value">
-          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.lastName" placeholder="Last Name" [showClearButton]="true">
+          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.lastName" placeholder="Last Name"
+                       [showClearButton]="true">
           </dx-text-box>
         </div>
       </div>
@@ -85,7 +82,8 @@
       <div class="dx-field">
         <div class="dx-field-label">Gender</div>
         <div class="dx-field-value">
-          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.gender" placeholder="Gender" [showClearButton]="true">
+          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.gender" placeholder="Gender"
+                       [showClearButton]="true">
           </dx-text-box>
         </div>
       </div>
@@ -93,19 +91,33 @@
       <div class="dx-field">
         <div class="dx-field-label">Location</div>
         <div class="dx-field-value">
-          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.location" placeholder="Location" [showClearButton]="true">
+          <dx-text-box [readOnly]="!IsEditable" [(value)]="responseData.location" placeholder="Location"
+                       [showClearButton]="true">
           </dx-text-box>
         </div>
       </div>
 
       <br>
-      <dx-button stylingMode="text" style="float: right" *ngIf="!IsEditable" icon="edit" type="normal" (onClick)="toggleEdit()" text="edit"></dx-button>
+      <dx-button stylingMode="text" style="float: right" *ngIf="!IsEditable" icon="edit" type="normal"
+                 (onClick)="toggleEdit()" text="edit"></dx-button>
 
-      <dx-button stylingMode="text" style="float: right; margin-left: 5px" *ngIf="IsEditable" icon="check" type="success" text="submit" [useSubmitBehavior]="true" ></dx-button>
-      <dx-button stylingMode="text" style="float: right" *ngIf="IsEditable" icon="close" type="default" (onClick)="cancelEdit()" text="cancel"></dx-button>
+      <dx-button stylingMode="text" style="float: right; margin-left: 5px" *ngIf="IsEditable" icon="check"
+                 type="success" text="submit" [useSubmitBehavior]="true"></dx-button>
+      <dx-button stylingMode="text" style="float: right" *ngIf="IsEditable" icon="close" type="default"
+                 (onClick)="cancelEdit()" text="cancel"></dx-button>
 
     </div>
   </form>
+  <dx-file-uploader
+    *ngIf="IsEditable"
+    [uploadMethod]="'POST'"
+    [multiple]="false"
+    [uploadMode]="'instantly'"
+    [uploadUrl]="picUploadUrl"
+    [allowedFileExtensions]="['.jpg', '.jpeg', '.gif', '.png']"
+    (onUploaded)="FileUploaded($event)"
+    (onUploadError)="FileError($event)">
+  </dx-file-uploader>
 </div>
 
 <!--ADDITIONAL POP_OVER_INFO-->
@@ -115,6 +127,6 @@
   [width]="300"
   [(visible)]="popVisible">
   <div *dxTemplate="let data = model of 'content'">
-   {{popText}}
+    {{popText}}
   </div>
 </dx-popover>
