@@ -14,7 +14,6 @@ namespace hsl.db.Entities
         public double Price { set; get; }
         public DateTime PublishDate { get; set; }
         
-        public int? ImageId { get; set; }
-        public Image Image { get; set; }
+        public virtual IList<AppImage> Images { get; set; }
     }
 }

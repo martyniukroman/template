@@ -15,6 +15,6 @@ namespace hsl.api.Models
         public string UserId { get; set; }
         public string ClientId { get; set; }
 
-        public virtual User User { get; set; }
+        public virtual AppUser AppUser { get; set; }
     }
 }

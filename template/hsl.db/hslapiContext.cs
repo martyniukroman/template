@@ -5,13 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hsl.api.Models
 {
-    public class hslapiContext : IdentityDbContext<User>
+    public class HslapiContext : IdentityDbContext<AppUser>
     {
-        public hslapiContext(DbContextOptions<hslapiContext> options)
+        public HslapiContext(DbContextOptions<HslapiContext> options)
             : base(options)
         {
         }
         public DbSet<Product> Products { set; get; }
+        public DbSet<AppImage> AppImages { set; get; }
         public DbSet<RefreshTokenModel> Tokens { set; get; }
 
         protected override void OnModelCreating(ModelBuilder builder)

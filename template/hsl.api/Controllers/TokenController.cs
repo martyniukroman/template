@@ -23,13 +23,13 @@ namespace hsl.api.Controllers
     public class TokenController : ControllerBase
     {
         private readonly RefreshTokenModel _refreshTokenModel;
-        private readonly UserManager<User> _userManager;
-        private readonly hslapiContext _hslapiContext;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly HslapiContext _hslapiContext;
         private readonly JwtIssuerOptions _jwtIssuerOptions;
 
-        public TokenController(UserManager<User> userManager,
+        public TokenController(UserManager<AppUser> userManager,
             RefreshTokenModel refreshTokenModel,
-            hslapiContext hslapiContextMir,
+            HslapiContext hslapiContextMir,
             IOptions<JwtIssuerOptions> options)
         {
             _userManager = userManager;
@@ -147,20 +147,20 @@ namespace hsl.api.Controllers
             });
         }
 
-        private async Task<TokenResponseModel> CreateAccessToken(User user, string rToken)
+        private async Task<TokenResponseModel> CreateAccessToken(AppUser appUser, string rToken)
         {
             double tokenExpiryTime = Convert.ToDouble(_jwtIssuerOptions.NotBefore); // token lifetime
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AppConfig.JwtSecret()));
-            var roles = await _userManager.GetRolesAsync(user);
+            var roles = await _userManager.GetRolesAsync(appUser);
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Sub, appUser.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.NameIdentifier, appUser.Id),
                     new Claim(ClaimTypes.Role, roles.FirstOrDefault()), // not sure about validating role
                 }),
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256),
@@ -177,9 +177,9 @@ namespace hsl.api.Controllers
                 expiration = access_token.ValidTo,
                 refresh_token = rToken,
                 roles = roles.FirstOrDefault(),
-                username = user.UserName,
-                displayName = user.DisplayName,
-                userId = user.Id,
+                username = appUser.UserName,
+                displayName = appUser.DisplayName,
+                userId = appUser.Id,
             };
         }
 

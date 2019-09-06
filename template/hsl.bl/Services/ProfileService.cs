@@ -12,12 +12,12 @@ namespace hsl.bl.Services
 {
     public class ProfileService : IProfile
     {
-        private readonly UserManager<User> _userManager;
-        private readonly hslapiContext _appDbContext;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly HslapiContext _appDbContext;
 
         public ProfileService(
-            UserManager<User> userManager,
-            hslapiContext hslapiContext
+            UserManager<AppUser> userManager,
+            HslapiContext hslapiContext
         )
         {
             _appDbContext = hslapiContext;

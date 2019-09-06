@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace hsl.db.Entities
 {
-    public class User : IdentityUser
+    public class AppUser : IdentityUser
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -17,7 +17,7 @@ namespace hsl.db.Entities
         public string Gender { get; set; }
         public IList<RefreshTokenModel> Tokens { get; set; }
 
-        public int? ImageId { get; set; }
-        public Image Image { get; set; }
+        public int? AppImageId { get; set; }
+        public virtual AppImage AppImage { get; set; }
     }
 }

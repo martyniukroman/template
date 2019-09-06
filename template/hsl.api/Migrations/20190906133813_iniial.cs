@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace hsl.api.Migrations
 {
-    public partial class initial : Migration
+    public partial class iniial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,17 +23,22 @@ namespace hsl.api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Image",
+                name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
-                    Caption = table.Column<string>(nullable: true)
+                    Caption = table.Column<string>(nullable: true),
+                    PictureUrl = table.Column<string>(nullable: true),
+                    StockCount = table.Column<int>(nullable: false),
+                    InCart = table.Column<int>(nullable: false),
+                    Price = table.Column<double>(nullable: false),
+                    PublishDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Image", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -55,6 +60,28 @@ namespace hsl.api.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppImages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Caption = table.Column<string>(nullable: true),
+                    AppUserId = table.Column<int>(nullable: true),
+                    ProductId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppImages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppImages_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,41 +112,15 @@ namespace hsl.api.Migrations
                     Location = table.Column<string>(nullable: true),
                     Locale = table.Column<string>(nullable: true),
                     Gender = table.Column<string>(nullable: true),
-                    ImageId = table.Column<int>(nullable: true)
+                    AppImageId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Image_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Image",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    Caption = table.Column<string>(nullable: true),
-                    PictureUrl = table.Column<string>(nullable: true),
-                    StockCount = table.Column<int>(nullable: false),
-                    InCart = table.Column<int>(nullable: false),
-                    Price = table.Column<double>(nullable: false),
-                    PublishDate = table.Column<DateTime>(nullable: false),
-                    ImageId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Products_Image_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Image",
+                        name: "FK_AspNetUsers_AppImages_AppImageId",
+                        column: x => x.AppImageId,
+                        principalTable: "AppImages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -133,14 +134,15 @@ namespace hsl.api.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     ExpiryTime = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
-                    ClientId = table.Column<string>(nullable: true)
+                    ClientId = table.Column<string>(nullable: true),
+                    AppUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRefreshTokens", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetRefreshTokens_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_AspNetRefreshTokens_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -247,9 +249,14 @@ namespace hsl.api.Migrations
                 values: new object[] { "3", null, "Moderator", "MODERATOR" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetRefreshTokens_UserId",
+                name: "IX_AppImages_ProductId",
+                table: "AppImages",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetRefreshTokens_AppUserId",
                 table: "AspNetRefreshTokens",
-                column: "UserId");
+                column: "AppUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -279,9 +286,11 @@ namespace hsl.api.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_ImageId",
+                name: "IX_AspNetUsers_AppImageId",
                 table: "AspNetUsers",
-                column: "ImageId");
+                column: "AppImageId",
+                unique: true,
+                filter: "[AppImageId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -294,11 +303,6 @@ namespace hsl.api.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_ImageId",
-                table: "Products",
-                column: "ImageId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -322,16 +326,16 @@ namespace hsl.api.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Products");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Image");
+                name: "AppImages");
+
+            migrationBuilder.DropTable(
+                name: "Products");
         }
     }
 }

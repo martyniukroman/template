@@ -13,10 +13,10 @@ namespace hsl.api.Controllers
     [Route("api/[controller]/[action]")]
     public class AccauntController : ControllerBase
     {
-        private UserManager<User> _userManager;
+        private UserManager<AppUser> _userManager;
         private JwtIssuerOptions _jwtIssuerOptions;
 
-        public AccauntController(UserManager<User> userManager, IOptions<JwtIssuerOptions> jwtIssuerOptions)
+        public AccauntController(UserManager<AppUser> userManager, IOptions<JwtIssuerOptions> jwtIssuerOptions)
         {
             this._userManager = userManager;
             this._jwtIssuerOptions = jwtIssuerOptions.Value;
@@ -28,7 +28,7 @@ namespace hsl.api.Controllers
             // holds errors related to registration process
             var errors = new List<string>();
 
-            var user = new User()
+            var user = new AppUser()
             {
                 Email = formData.Email,
                 UserName = formData.DisplayName, //UserName and Display is now the same

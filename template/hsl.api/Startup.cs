@@ -93,12 +93,12 @@ namespace hsl.api
             });
 
             // setup entity
-            services.AddEntityFrameworkSqlServer().AddDbContext<hslapiContext>(options =>
+            services.AddEntityFrameworkSqlServer().AddDbContext<HslapiContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("hslapiContextConnection"),
                     b => b.MigrationsAssembly("hsl.api")));
 
             //setupIdentity
-            var identityBuilder = services.AddIdentityCore<User>(o =>
+            var identityBuilder = services.AddIdentityCore<AppUser>(o =>
                                           {
                                               // configure identity options
                                               o.Password.RequireDigit = false;
@@ -111,17 +111,18 @@ namespace hsl.api
                                               o.Lockout.MaxFailedAccessAttempts = 3;
                                               o.Lockout.AllowedForNewUsers = true;
                                           }
-                                      ).AddRoles<IdentityRole>().AddEntityFrameworkStores<hslapiContext>()
+                                      ).AddRoles<IdentityRole>().AddEntityFrameworkStores<HslapiContext>()
                                       .AddDefaultTokenProviders() ?? throw new ArgumentNullException(nameof(services));
 
             identityBuilder =
                 new IdentityBuilder(identityBuilder.UserType, typeof(IdentityRole), identityBuilder.Services);
-            identityBuilder.AddEntityFrameworkStores<hslapiContext>().AddDefaultTokenProviders();
+            identityBuilder.AddEntityFrameworkStores<HslapiContext>().AddDefaultTokenProviders();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             // Initialization dependency injection
             services.AddScoped<RefreshTokenModel>();
             services.AddScoped<IProfile, ProfileService>();
+            services.AddScoped<IFileHandler, FileHandlerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

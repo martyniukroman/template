@@ -24,10 +24,14 @@ export class ProfileComponent extends BaseComponent {
   public popText: string = '';
 
   public imageValue: any[] = [];
-  public picUploadUrl = appConfig.BaseApiUrl + 'profile/UploadPicture';
+
+  public AuthHeader: any;
+  public picUploadUrl: string;
 
   constructor(private _dataProvider: DataServiceProvider, private authService: AuthService) {
     super();
+    this.AuthHeader = {'Authorization': 'Bearer ' + localStorage.getItem('jwt')};
+    this.picUploadUrl = appConfig.BaseApiUrl + 'file/UpdateUserImage' + '?userId=' + localStorage.getItem('userId');
   }
 
   async ngOnInit() {
@@ -41,7 +45,6 @@ export class ProfileComponent extends BaseComponent {
       this.responseData.userId = storedUserId;
       this._dataProvider.putData('profile/Update', this.responseData)
         .subscribe(x => {
-          console.log(x);
           if (x) {
             this.responseData = x;
             this.SuccessNotification('Success');
@@ -79,16 +82,14 @@ export class ProfileComponent extends BaseComponent {
 
   public getResponseData() {
     let storedUserId = localStorage.getItem('userId');
-    if (storedUserId) {
-      this._dataProvider.getDataObservable('profile/get' + '?userId=' + storedUserId).subscribe(x => {
-        this.responseData = x;
-      });
-    }
+    this._dataProvider.getDataObservable('profile/get' + '?userId=' + storedUserId).subscribe(x => {
+      this.responseData = x;
+    });
   }
 
   public FileUploaded(event) {
     console.log(event);
-    this.fileUploader.instance.reset();
+    // this.fileUploader.instance.reset();
   }
 
   public FileError(event) {

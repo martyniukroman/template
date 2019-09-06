@@ -72,34 +72,7 @@ namespace hsl.api.Controllers
                     code = 500,
                     caption = ex.Message + ' ' + ex.InnerException?.Message,
                     tag = "exceptionError"
-                }); 
-            }
-        }
-        
-
-        [HttpPost]
-        public IActionResult UpdateImage()
-        {
-            try
-            {
-                var file = Request.Form.Files[0];
-                var sb = "";
-
-                if (file.Length > 0)
-                {
-                    
-                }
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return new BadRequestObjectResult(new ErrorViewModel
-                {
-                    code = 500,
-                    caption = ex.Message + ' ' + ex.InnerException?.Message,
-                    tag = "exceptionError"
-                }); 
+                });
             }
         }
         
