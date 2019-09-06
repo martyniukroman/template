@@ -8,8 +8,14 @@
 
   <form [action]="'/'" (submit)="onFormSubmit($event)" *ngIf="responseData">
     <div class="dx-form-group-with-caption">
-      <span *ngIf="!IsEditable" class="dx-form-group-caption">Your profile data</span>
-      <span *ngIf="IsEditable" class="dx-form-group-caption">Edit</span>
+      <span *ngIf="!IsEditable" class="dx-form-group-caption">
+        <i class="dx-icon-user" style="font-size: 20px;" ></i>
+        Your profile data
+      </span>
+      <span *ngIf="IsEditable" class="dx-form-group-caption">
+        <i class="dx-icon-edit" style="font-size: 20px;" ></i>
+         Editing
+      </span>
       <br>
       <hr>
 
