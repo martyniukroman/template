@@ -36,20 +36,6 @@ export class RegisterComponent extends BaseComponent {
     return value.length >= 6;
   }
 
-  validateEmail(event): boolean {
-    let value = event.value.toString();
-
-    this._dataService.getDataObservable('accaunt/IsUserEmailExist' + '?useremail=' + event.value).subscribe(
-      x => {
-        if (x) {
-          event.rule.message = 'This email is already taken';
-          event.rule.isValid = false;
-        }
-      }
-    );
-    return value.includes('.') && value.includes('@') && value.length > 5;
-  }
-
   validateUsername(event) {
     this._dataService.getDataObservable('accaunt/IsUserNameExist' + '?username=' + event.value).subscribe(
       x => {
