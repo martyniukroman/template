@@ -70,10 +70,13 @@ namespace hsl.bl.Services
             }
 
             var user = _userManager.FindByIdAsync(userId);
+            if (user == null) throw new Exception("User not found");
+
             
-            //TODO: initialise image and save to db
-            
-            await _hslapiContext.AppImages.AddAsync(new AppImage());
+            await _hslapiContext.AppImages.AddAsync(new AppImage()
+            {
+                
+            });
 
             return new OkObjectResult("good");
 
