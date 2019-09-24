@@ -12,7 +12,8 @@ namespace hsl.api.Models
         {
         }
         public DbSet<Product> Products { set; get; }
-        public DbSet<AppImage> AppImages { set; get; }
+        public DbSet<AppProductImage> AppProductImages { set; get; }
+        public DbSet<AppUserImage> AppUserImages { set; get; }
         public DbSet<RefreshTokenModel> Tokens { set; get; }
 
         protected override void OnModelCreating(ModelBuilder builder)

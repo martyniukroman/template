@@ -9,12 +9,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace hsl.bl.Services
 {
     public class FileHandlerService : IFileHandler
     {
-        
         const int MIN_HEIGHT = 150;
         const int MAX_HEIGHT = 3000;
         const int MIN_WIDTH = 150;
@@ -34,23 +34,25 @@ namespace hsl.bl.Services
         private readonly string _rootDataFolder;
         private readonly IHostingEnvironment _env;
         private readonly UserManager<AppUser> _userManager;
-        
-        public FileHandlerService(HslapiContext hslapiContextMir, IHostingEnvironment env, UserManager<AppUser> userManager)
+
+        public FileHandlerService(HslapiContext hslapiContextMir, IHostingEnvironment env,
+            UserManager<AppUser> userManager)
         {
             _hslapiContext = hslapiContextMir;
             _env = env;
             _rootDataFolder = "~/App_Data";
             _userManager = userManager;
         }
-        
+
         public async Task<IActionResult> HandleUserProfileImage(IFormFile formFile, string userId)
         {
-            var isImageValid = ImageValidator.IsValidImageFile(formFile, MIN_HEIGHT, MAX_HEIGHT, MIN_WIDTH, MAX_WIDTH) &&
-                                ImageValidator.IsImage(formFile);
-            
-            if(!isImageValid) throw new Exception("File is invalid");
-            
-            var webRootPath = _env.WebRootPath;
+            var isImageValid =
+                ImageValidator.IsValidImageFile(formFile, MIN_HEIGHT, MAX_HEIGHT, MIN_WIDTH, MAX_WIDTH) &&
+                ImageValidator.IsImage(formFile);
+
+            if (!isImageValid) throw new Exception("File is invalid");
+
+            var webRootPath = _env.ContentRootPath;
             var folderName = "Images";
             var avatarFolder = "ProfileImages";
 
@@ -59,27 +61,35 @@ namespace hsl.bl.Services
             {
                 Directory.CreateDirectory(fileDestinationDirectory);
             }
-          
+
             var fileExtension = Path.GetExtension(formFile.FileName);
             var fileName = userId + fileExtension;
             var fileFullPath = Path.Combine(fileDestinationDirectory, fileName);
-            
+
             using (var stream = new FileStream(fileFullPath, FileMode.Create))
             {
-                await formFile.CopyToAsync(stream); 
+                await formFile.CopyToAsync(stream);
             }
 
-            var user = _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId);
             if (user == null) throw new Exception("User not found");
 
-            
-            await _hslapiContext.AppImages.AddAsync(new AppImage()
+            var image = new AppUserImage
             {
-                
-            });
+                AppUserId = user.Id,
+                AppUser = user,
+                Name = fileName,
+            };
+            await _hslapiContext.AppUserImages.AddAsync(image);
+            await _hslapiContext.SaveChangesAsync();
 
+            var targetImage = await _hslapiContext.AppUserImages.FirstOrDefaultAsync(x => x.AppUserId == user.Id);
+//            user.AppImage = targetImage;
+//            user.AppUserImageId = targetImage.Id;
+            
+            await _userManager.UpdateAsync(user);
+            
             return new OkObjectResult("good");
-
         }
     }
 }

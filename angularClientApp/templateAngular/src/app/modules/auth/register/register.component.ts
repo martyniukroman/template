@@ -19,7 +19,6 @@ export class RegisterComponent extends BaseComponent {
   constructor(private _authService: AuthService, private _router: Router, private _dataService: DataServiceProvider) {
     super();
     this.validatePassword = this.validatePassword.bind(this);
-    this.validateEmail = this.validateEmail.bind(this);
     this.validateUsername = this.validateUsername.bind(this);
   }
 

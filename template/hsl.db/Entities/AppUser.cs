@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using hsl.api.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -17,7 +18,6 @@ namespace hsl.db.Entities
         public string Gender { get; set; }
         public IList<RefreshTokenModel> Tokens { get; set; }
 
-        public int? AppImageId { get; set; }
-        public virtual AppImage AppImage { get; set; }
+        public virtual AppUserImage AppUserImage { get; set; }
     }
 }
