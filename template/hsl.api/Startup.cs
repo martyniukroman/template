@@ -123,6 +123,7 @@ namespace hsl.api
             services.AddScoped<RefreshTokenModel>();
             services.AddScoped<IProfile, ProfileService>();
             services.AddScoped<IFileHandler, FileHandlerService>();
+            services.AddScoped<IToken, TokenService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

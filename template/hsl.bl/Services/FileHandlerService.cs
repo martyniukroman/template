@@ -86,9 +86,9 @@ namespace hsl.bl.Services
             var targetImage = await _hslapiContext.AppUserImages.FirstOrDefaultAsync(x => x.AppUserId == user.Id);
 //            user.AppImage = targetImage;
 //            user.AppUserImageId = targetImage.Id;
-            
+
             await _userManager.UpdateAsync(user);
-            
+
             return new OkObjectResult("good");
         }
     }
