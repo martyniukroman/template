@@ -10,8 +10,8 @@ using hsl.api.Models;
 namespace hsl.api.Migrations
 {
     [DbContext(typeof(HslapiContext))]
-    [Migration("20190906133813_iniial")]
-    partial class iniial
+    [Migration("20191216111854_Catalog")]
+    partial class Catalog
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,13 +45,11 @@ namespace hsl.api.Migrations
                     b.ToTable("AspNetRefreshTokens");
                 });
 
-            modelBuilder.Entity("hsl.db.Entities.AppImage", b =>
+            modelBuilder.Entity("hsl.db.Entities.AppProductImage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AppUserId");
 
                     b.Property<string>("Caption");
 
@@ -63,7 +61,7 @@ namespace hsl.api.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("AppImages");
+                    b.ToTable("AppProductImages");
                 });
 
             modelBuilder.Entity("hsl.db.Entities.AppUser", b =>
@@ -72,8 +70,6 @@ namespace hsl.api.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
-
-                    b.Property<int?>("AppImageId");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -126,10 +122,6 @@ namespace hsl.api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppImageId")
-                        .IsUnique()
-                        .HasFilter("[AppImageId] IS NOT NULL");
-
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
 
@@ -139,6 +131,25 @@ namespace hsl.api.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("hsl.db.Entities.AppUserImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AppUserId");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId")
+                        .IsUnique()
+                        .HasFilter("[AppUserId] IS NOT NULL");
+
+                    b.ToTable("AppUserImages");
                 });
 
             modelBuilder.Entity("hsl.db.Entities.Product", b =>
@@ -289,18 +300,18 @@ namespace hsl.api.Migrations
                         .HasForeignKey("AppUserId");
                 });
 
-            modelBuilder.Entity("hsl.db.Entities.AppImage", b =>
+            modelBuilder.Entity("hsl.db.Entities.AppProductImage", b =>
                 {
                     b.HasOne("hsl.db.Entities.Product", "Product")
                         .WithMany("Images")
                         .HasForeignKey("ProductId");
                 });
 
-            modelBuilder.Entity("hsl.db.Entities.AppUser", b =>
+            modelBuilder.Entity("hsl.db.Entities.AppUserImage", b =>
                 {
-                    b.HasOne("hsl.db.Entities.AppImage", "AppImage")
-                        .WithOne("AppUser")
-                        .HasForeignKey("hsl.db.Entities.AppUser", "AppImageId");
+                    b.HasOne("hsl.db.Entities.AppUser", "AppUser")
+                        .WithOne("AppUserImage")
+                        .HasForeignKey("hsl.db.Entities.AppUserImage", "AppUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

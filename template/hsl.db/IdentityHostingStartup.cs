@@ -3,9 +3,9 @@
 //using Microsoft.AspNetCore.Identity;
 //using Microsoft.EntityFrameworkCore;
 //using Microsoft.Extensions.DependencyInjection;
-//
+
 //[assembly: HostingStartup(typeof(hsl.api.Areas.Identity.IdentityHostingStartup))]
-//
+
 //namespace hsl.api.Areas.Identity
 //{
 //    public class IdentityHostingStartup : IHostingStartup
@@ -14,12 +14,15 @@
 //        {
 //            builder.ConfigureServices((context, services) =>
 //            {
-//                services.AddDbContext<hslapiContext>(options =>
+//                services.AddDbContext<HslapiContext>(options =>
 //                    options.UseSqlServer(
-//                        context.Configuration.GetConnectionString("hslapiContextConnection")));
-//
+//                        context.Configuration.GetConnectionString("LocalHostConnection")));
+
+//                services.AddDbContext<HslapiContext>(options =>
+//                    options.UseSqlServer(config.GetConnectionString("optimumDB")));
+
 //                services.AddDefaultIdentity<IdentityUser>()
-//                    .AddEntityFrameworkStores<hslapiContext>();
+//                    .AddEntityFrameworkStores<HslapiContext>();
 //            });
 //        }
 //    }

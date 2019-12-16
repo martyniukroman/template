@@ -10,8 +10,8 @@ using hsl.api.Models;
 namespace hsl.api.Migrations
 {
     [DbContext(typeof(HslapiContext))]
-    [Migration("20190924120806_separateImages")]
-    partial class separateImages
+    [Migration("20191216111422_InitialLocalhost")]
+    partial class InitialLocalhost
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

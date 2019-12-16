@@ -94,7 +94,7 @@ namespace hsl.api
 
             // setup entity
             services.AddEntityFrameworkSqlServer().AddDbContext<HslapiContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("hslapiContextConnection"),
+                options.UseSqlServer(Configuration.GetConnectionString("LocalHostConnection"),
                     b => b.MigrationsAssembly("hsl.api")));
 
             //setupIdentity

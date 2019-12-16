@@ -9,7 +9,7 @@ using hsl.api.Models;
 namespace hsl.api.Migrations
 {
     [DbContext(typeof(HslapiContext))]
-    partial class hslapiContextModelSnapshot : ModelSnapshot
+    partial class HslapiContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

@@ -10,6 +10,7 @@ namespace hsl.api.Models
         public HslapiContext(DbContextOptions<HslapiContext> options)
             : base(options)
         {
+            Database.EnsureCreated();
         }
         public DbSet<Product> Products { set; get; }
         public DbSet<AppProductImage> AppProductImages { set; get; }
