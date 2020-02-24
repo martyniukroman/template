@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -16,9 +15,8 @@ using hsl.bl.Services;
 using hsl.db.Entities;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace hsl.api
 {
@@ -39,22 +37,12 @@ namespace hsl.api
             services.TryAddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
             //enable CORS
-            services.AddCors();
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
-                    x => x
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
+                options.AddDefaultPolicy(policy =>
+                    policy.AllowAnyOrigin()
                         .AllowAnyHeader()
-                        .AllowCredentials()
-                        .Build()
-                );
-            });
-
-            services.Configure<MvcOptions>(options =>
-            {
-                options.Filters.Add(new CorsAuthorizationFilterFactory("CorsPolicy"));
+                        .AllowAnyMethod());
             });
 
             // setup mapper
@@ -151,11 +139,15 @@ namespace hsl.api
                 });
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseCors();
             app.UseAuthentication();
+            app.UseStaticFiles();
             app.UseDefaultFiles();
-            app.UseMvc();
-            app.UseCors("CorsPolicy");
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
